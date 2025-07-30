@@ -2,7 +2,219 @@
 body{
     background-color: #0b0249;
 }
+/* headers */
+body {
+  background: #0b0249;
+  position: relative;  /* establish positioning context */
+  color:white
+}
 
+h2{
+  padding: 2rem;
+  color:white;
+}
+
+.info{
+  font-size: 1.5rem;
+  font-family :'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ 
+}
+
+
+/* translucent background image */
+/* body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('/images/background.png') no-repeat center center fixed ;
+  background-size: cover;
+  
+  opacity: 0.5;       
+  z-index: -1;       
+} */
+
+body.black-bg{
+  background: fixed;
+  background-color:#0b0249;
+  
+}
+
+/* ====== Hero Section ====== */
+.hero {
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  height: 200px;         /* fill viewport */
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+/* banner properties */
+.banner-div {
+  /* use a fixed radius that’s definitely bigger than your border */
+  border-radius: 20px;   
+  border: 3px solid #e8ec09;
+
+  /* make the div clip its background & any children to that radius */
+  overflow: hidden;          
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+
+  /* your existing settings */
+  background: url("../images/background.png") no-repeat center center;
+  background-size: cover;    /* ensure it fills the box */
+  width: 100%;               /* responsive width */
+  max-width: 1450px;         /* optional cap */
+  height: 300px;             /* or use aspect ratio trick if you like */
+  margin: 0 auto;            /* center horizontally */
+  padding-left: 30px;
+}
+
+/* OPTIONAL: maintain aspect ratio for truly responsive height */
+.banner-div {
+  height: 0;
+  padding-top: 25%;       /* aspect ratio: 300px/1200px = 25% */
+}
+
+
+.btn-discover {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: background 0.2s;
+}
+
+.btn-discover:hover {
+  background: #fff;
+}
+
+
+
+/* ====== Logo & Title ====== */
+.logo span {
+ 
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+/* Make the title text larger */
+.logo span span, /* nested span if used */
+.logo span {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #fcfbfb;
+}
+
+/* ====== Navbar ====== */
+header {
+  position: relative;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  /* background: rgba(0, 0, 0, 0.5); */
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  padding: 0.5rem 0.5rem;
+  font-size: 1.35rem;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+nav a:hover {
+  background-color: #fff9c4; /* soft yellow */
+  color: #000;               /* dark text for contrast */
+}
+
+/* ====== Mobile Menu Toggle ====== */
+.menu-toggle {
+  display: none;
+  position:absolute;
+  top: 50%;            
+  right: 2rem;
+  flex-direction: column;
+  cursor: pointer;
+  transform: translateY(-50%);  
+  
+}
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  margin-bottom: 5px;
+  
+}
+
+/* ====== Responsive Images ====== */
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ====== Responsive Navbar ====== */
+@media (max-width:900px) {
+  .menu-toggle {
+    display: flex ;
+    
+    
+  }
+  nav ul {
+    position: absolute;
+    top: 64px;
+    right: 2rem;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    display: none;
+  }
+  nav ul.open {
+    display: flex;
+  }
+  nav{
+    gap: 0.5rem;
+    padding: 0.25rem 0.25rem;
+  }
+}
+/* end of header styles */
+/* ----------------------------------------
+   Full cards.css (includes carousel styles)
+   ---------------------------------------- */
+
+/* Container grid */
 .cards-container {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -16,7 +228,7 @@ body{
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  text-decoration: none;   /* if used as <a> */
+  text-decoration: none;
   color: inherit;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
@@ -29,7 +241,7 @@ body{
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Image */
+/* Image (static or carousel slide) */
 .card1-img {
   width: 100%;
   height: 180px;
@@ -37,7 +249,16 @@ body{
   background-color: #f0f0f0;
 }
 
-/* Body */
+/* Placeholder for no-image */
+.card1-img.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555555;
+  font-size: 1rem;
+}
+
+/* Card body */
 .card1-body {
   padding: 1rem;
   flex: 1;
@@ -51,6 +272,7 @@ body{
   font-size: 1.25rem;
   margin: 0 0 0.5rem;
   line-height: 1.2;
+  color: #0b0249;
 }
 
 /* Date & Place */
@@ -58,21 +280,72 @@ body{
 .card1-place {
   font-size: 0.9rem;
   margin: 0.25rem 0;
-  color: #555555;
+  color: #050505;
 }
 
+/* Responsive columns */
 @media (min-width: 600px) {
   .cards-container {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* ≥900px: 3 columns */
 @media (min-width: 900px) {
   .cards-container {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ----------------------------------------
+   Carousel Styles (for .card-carousel)
+   ---------------------------------------- */
+
+.card-carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 180px;  /* match .card1-img height */
+}
+
+.card-carousel .slides {
+  display: flex;
+  transition: transform 0.5s ease;
+  will-change: transform;
+}
+
+.card-carousel .slide {
+  min-width: 100%;
+  object-fit: cover;
+  height: 180px;  /* match container height */
+}
+
+/* Navigation buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.4);
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.carousel-btn.prev {
+  left: 8px;
+}
+
+.carousel-btn.next {
+  right: 8px;
+}
+
+/* Optionally hide nav when only one slide */
+/* .card-carousel[data-single-slide] .carousel-btn {
+     display: none;
+} */
+
 
 /* Wrapper for detail page */
 .event-detail {

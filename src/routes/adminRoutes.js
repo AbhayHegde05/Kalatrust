@@ -5,6 +5,7 @@ const router         = express.Router()
 const { ensureAuth } = require('../middleware/auth')  // destructured import
 const Program        = require('../models/programModel')
 const Media          = require('../models/mediaModel')
+const { makeEmbedUrl } = require('../utils/driveUtils');
 
 router.use(ensureAuth)  // Protect all /api/admin/*
 
@@ -35,14 +36,24 @@ router.post('/programs', async (req, res, next) => {
     })
 
     if (Array.isArray(media) && media.length) {
-      const mediaDocs = media.map(item => ({
+    const mediaDocs = media.map(item => {
+      // compute embedUrl from your helper
+      const embedUrl = makeEmbedUrl(item.driveLink, item.mediaType);
+      if (!embedUrl) {
+        throw new Error(
+          `Invalid Drive link for mediaType "${item.mediaType}": ${item.driveLink}`
+        );
+    }
+     return {
         program:   program._id,
         driveLink: item.driveLink,
         mediaType: item.mediaType,
-        caption:   item.caption || ''
-      }))
-      await Media.insertMany(mediaDocs)
-    }
+        caption:   item.caption || '',
+        url:       embedUrl
+      };
+    });
+    await Media.insertMany(mediaDocs);
+  }
 
     return res
       .status(201)
@@ -89,5 +100,30 @@ router.post('/media', async (req, res, next) => {
     next(err)
   }
 })
+
+
+
+
+router.post('/admin/event', async (req, res) => {
+  const { name, description, date, place, artists, mediaLinks } = req.body;
+
+  const media = (mediaLinks || []).map(link => ({
+    url: makeEmbedUrl(link, 'drive-img'),
+    type: 'image'
+  }));
+
+  const newEvent = new Event({
+    name,
+    description,
+    date: new Date(date),
+    place,
+    artists: artists ? artists.split(',') : [],
+    media
+  });
+
+  await newEvent.save();
+  res.redirect('/events');
+});
+
 
 module.exports = router
