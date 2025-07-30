@@ -1,0 +1,369 @@
+/* ====== Global Reset ====== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* ====== Full Viewport Setup ====== */
+html, body { width: 100%; height: 100%; }
+
+/* remove any direct body bg */
+body {
+  background: #0b0249;
+  position: relative;  /* establish positioning context */
+  color:white
+}
+
+h2{
+  padding: 2rem;
+  color:white;
+}
+
+.info{
+  font-size: 1.5rem;
+  font-family :'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ 
+}
+
+
+/* translucent background image */
+/* body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('/images/background.png') no-repeat center center fixed ;
+  background-size: cover;
+  
+  opacity: 0.5;       
+  z-index: -1;       
+} */
+
+body.black-bg{
+  background: fixed;
+  background-color:#0b0249;
+  
+}
+
+/* ====== Hero Section ====== */
+.hero {
+  display: flex;
+  align-items: top;
+  justify-content: center;
+  height: 200px;         /* fill viewport */
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+/* banner properties */
+.banner-div {
+  /* use a fixed radius that’s definitely bigger than your border */
+  border-radius: 20px;   
+  border: 3px solid #e8ec09;
+
+  /* make the div clip its background & any children to that radius */
+  overflow: hidden;          
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+
+  /* your existing settings */
+  background: url("../images/background.png") no-repeat center center;
+  background-size: cover;    /* ensure it fills the box */
+  width: 100%;               /* responsive width */
+  max-width: 1450px;         /* optional cap */
+  height: 300px;             /* or use aspect ratio trick if you like */
+  margin: 0 auto;            /* center horizontally */
+  padding-left: 30px;
+}
+
+/* OPTIONAL: maintain aspect ratio for truly responsive height */
+.banner-div {
+  height: 0;
+  padding-top: 25%;       /* aspect ratio: 300px/1200px = 25% */
+}
+
+
+.btn-discover {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: background 0.2s;
+}
+
+.btn-discover:hover {
+  background: #fff;
+}
+
+
+
+/* ====== Logo & Title ====== */
+.logo span {
+ 
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+/* Make the title text larger */
+.logo span span, /* nested span if used */
+.logo span {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #fcfbfb;
+}
+
+/* ====== Navbar ====== */
+header {
+  position: relative;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  /* background: rgba(0, 0, 0, 0.5); */
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  padding: 0.5rem 0.5rem;
+  font-size: 1.35rem;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+nav a:hover {
+  background-color: #fff9c4; /* soft yellow */
+  color: #000;               /* dark text for contrast */
+}
+
+/* ====== Mobile Menu Toggle ====== */
+.menu-toggle {
+  display: none;
+  position:absolute;
+  top: 50%;            
+  right: 2rem;
+  flex-direction: column;
+  cursor: pointer;
+  transform: translateY(-50%);  
+  
+}
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  margin-bottom: 5px;
+  
+}
+
+/* ====== Responsive Images ====== */
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* ====== Responsive Navbar ====== */
+@media (max-width:900px) {
+  .menu-toggle {
+    display: flex ;
+    
+    
+  }
+  nav ul {
+    position: absolute;
+    top: 64px;
+    right: 2rem;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem;
+    display: none;
+  }
+  nav ul.open {
+    display: flex;
+  }
+  nav{
+    gap: 0.5rem;
+    padding: 0.25rem 0.25rem;
+  }
+}
+
+/* cards  */
+.cards-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* From Uiverse.io by adamgiebl */ 
+.card {
+  flex: 1 1 300px;
+  width: 280px;
+  height: 250px;
+  border-radius: 20px;
+  padding: 5px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  background-image: linear-gradient(144deg,#cce656, #d6915f 50%,#ffba4c);
+  text-align: center;
+  text-wrap: wrap;
+}
+
+.card__content {
+  background: rgb(5, 6, 45);
+  border-radius: 17px;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .cards-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    width: 80%;         /* fills screen nicely, avoids squishing */
+    height: auto;       /* removes fixed height to prevent overflow */
+    margin-bottom: 1rem;
+  }
+
+  .hero-content h1{
+    font-size: 1.5rem;
+  }
+
+}
+
+
+/* ------------------------------------------------------------------------------------------------------- */
+
+
+/* about.html */
+
+/* -----------------------------
+   About-page grid & card styles
+   ----------------------------- */
+
+/* Container grid for all sections */
+.main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+/* Two-column layout on wider screens */
+@media (min-width: 950px) {
+  .main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Square cards */
+.section-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content:flex-start;
+  
+}
+
+.section-card h3{
+  margin-top: 0;
+  color: #1903ac;
+  font-size: 2rem;
+}
+
+.section-card h4 {
+  margin-top: 0;
+  color: #1903ac;
+  font-size: 1rem;
+}
+
+
+.section-card p {
+  flex-direction: none;
+  color: #000000;
+  line-height: 1.4;
+  font-size: large;
+}
+
+.section-card ul{
+  color: black;
+  padding:  1rem;
+   flex-direction: none;
+  color: #000000;
+  line-height: 1.4;
+  font-size: large;
+}
+
+
+
+/* Team-member grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.team-member {
+  background: #fafafa;
+  padding: 1rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.team-member img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 0.5rem;
+}
+
+/* CTA button */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: #0077cc;
+  color: #fff;
+  border-radius: 4px;
+  text-decoration: none;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Main ejs styling */
+

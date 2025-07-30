@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin: Add Event</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 2rem auto;
+      line-height: 1.4;
+    }
+    h1, h2 { margin-bottom: .5rem; }
+    .field-group { margin-bottom: 1rem; }
+    label { display: block; font-weight: bold; margin-bottom: .25rem; }
+    input, textarea, select, button {
+      width: 100%;
+      padding: .5rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button { width: auto; margin-top: .5rem; cursor: pointer; }
+    .artist-block, .media-block {
+      border: 1px solid #ddd;
+      padding: .75rem;
+      margin-bottom: .5rem;
+      position: relative;
+    }
+    .remove-btn {
+      position: absolute;
+      top: .5rem;
+      right: .5rem;
+      background: #f44336;
+      color: #fff;
+      border: none;
+      padding: .25rem .5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Create New Event</h1>
+  <form id="event-form">
+    <!-- Event Details -->
+    <div class="field-group">
+      <label for="name">Name *</label>
+      <input id="name" name="name" type="text" required />
+    </div>
+    <div class="field-group">
+      <label for="date">Date *</label>
+      <input id="date" name="date" type="date" required />
+    </div>
+    <div class="field-group">
+      <label for="place">Place *</label>
+      <input id="place" name="place" type="text" required />
+    </div>
+    <div class="field-group">
+      <label for="description">Description *</label>
+      <textarea id="description" name="description" rows="3" required></textarea>
+    </div>
+
+    <!-- Artists -->
+    <h2>Artists</h2>
+    <div id="artists-container"></div>
+    <button type="button" id="add-artist-btn">Add Artist</button>
+
+    <!-- Media (Optional) -->
+    <h2>Media (optional)</h2>
+    <div id="media-container"></div>
+    <button type="button" id="add-media-btn">Add Media Link</button>
+
+    <div style="margin-top: 2rem;">
+      <button type="submit">Save Event</button>
+    </div>
+  </form>
+
+  <script>
+    (function() {
+      const artistsContainer = document.getElementById('artists-container');
+      const mediaContainer   = document.getElementById('media-container');
+      const addArtistBtn     = document.getElementById('add-artist-btn');
+      const addMediaBtn      = document.getElementById('add-media-btn');
+      const form             = document.getElementById('event-form');
+
+      function createArtistBlock() {
+        const div = document.createElement('div');
+        div.className = 'artist-block field-group';
+
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.placeholder = 'Artist name';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = 'Remove';
+        btn.className = 'remove-btn';
+        btn.onclick = () => div.remove();
+
+        div.append(inp, btn);
+        return div;
+      }
+
+      function createMediaBlock() {
+        const div = document.createElement('div');
+        div.className = 'media-block';
+
+        const link = document.createElement('input');
+        link.type = 'text';
+        link.placeholder = 'Google Drive link';
+        link.className = 'drive-link';
+
+        const select = document.createElement('select');
+        select.className = 'media-type';
+        [
+          { v: 'drive-img',   t: 'Image' },
+          { v: 'drive-video', t: 'Video' }
+        ].forEach(o => {
+          const opt = document.createElement('option');
+          opt.value = o.v;
+          opt.textContent = o.t;
+          select.appendChild(opt);
+        });
+
+        const caption = document.createElement('input');
+        caption.type = 'text';
+        caption.placeholder = 'Caption (optional)';
+        caption.className = 'caption';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = 'Remove';
+        btn.className = 'remove-btn';
+        btn.onclick = () => div.remove();
+
+        div.append(link, select, caption, btn);
+        return div;
+      }
+
+      addArtistBtn.addEventListener('click', () =>
+        artistsContainer.appendChild(createArtistBlock())
+      );
+
+      addMediaBtn.addEventListener('click', () =>
+        mediaContainer.appendChild(createMediaBlock())
+      );
+
+      form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      // 1. Build your payload exactly as before
+      const data = {
+        name:        form.name.value.trim(),
+        date:        form.date.value,
+        place:       form.place.value.trim(),
+        description: form.description.value.trim(),
+        artists:     [],
+        media:       []
+      };
+      document.querySelectorAll('.artist-block input').forEach(inp => {
+        if (inp.value.trim()) data.artists.push(inp.value.trim());
+      });
+      document.querySelectorAll('.media-block').forEach(div => {
+        const link = div.querySelector('.drive-link').value.trim();
+        if (link) {
+          data.media.push({
+            driveLink: link,
+            mediaType: div.querySelector('.media-type').value,
+            caption:   div.querySelector('.caption').value.trim()
+          });
+        }
+      });
+
+        try {
+        const resp = await fetch('/api/admin/programs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',      // if you’re using cookie sessions
+          body: JSON.stringify(data)
+        });
+        const json = await resp.json();
+        if (!resp.ok) throw new Error(json.error || 'Server error');
+        alert('Event saved! ID: ' + json.program._id);
+        // optionally clear form or redirect here
+      } catch (err) {
+        console.error(err);
+        alert('Error saving event: ' + err.message);
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

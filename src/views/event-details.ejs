@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title><%= event.name %> — Event Details</title>
+  <link rel="stylesheet" href="/css/cards.css" />
+</head>
+<body>
+  <div class="event-detail">
+
+    <!-- 1. Event Title -->
+    <header>
+      <h1><%= event.name %></h1>
+    </header>
+
+    <!-- 2. Gallery of Images -->
+    <% if (event.media && event.media.length) { %>
+      <section class="media-gallery">
+        <div class="gallery">
+          <% event.media.forEach(m => { %>
+            <div class="card1">
+              <img src="<%= m.url %>" alt="Image for <%= event.name %>" class="card1-img" />
+            </div>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+
+    <!-- 3. Date and Place -->
+    <section class="date-place">
+      <p><%= event.date.toDateString() %> | <%= event.place %></p>
+    </section>
+
+    <!-- 4. Description -->
+    <section class="description">
+      <h2>Description</h2>
+      <p><%= event.description %></p>
+    </section>
+
+    <!-- 5. Artists (if present) -->
+    <% if (event.artists && event.artists.length) { %>
+      <section class="artists">
+        <h2>Artists</h2>
+        <ul>
+          <% event.artists.forEach(artist => { %>
+            <li><%= artist %></li>
+          <% }) %>
+        </ul>
+      </section>
+    <% } %>
+
+    <!-- 6. Back Link -->
+    <footer>
+      <a href="/events" class="back-link">← Back to events</a>
+    </footer>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,194 @@
+/* Container: responsive grid */
+body{
+    background-color: #0b0249;
+}
+
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+/* Card base */
+.card1 {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-decoration: none;   /* if used as <a> */
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.card1:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Image */
+.card1-img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background-color: #f0f0f0;
+}
+
+/* Body */
+.card1-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Title */
+.card1-title {
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+/* Date & Place */
+.card1-date,
+.card1-place {
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+  color: #555555;
+}
+
+@media (min-width: 600px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ≥900px: 3 columns */
+@media (min-width: 900px) {
+  .cards-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Wrapper for detail page */
+.event-detail {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  color: #fdf5f5;
+  font-family: Arial, sans-serif;
+}
+
+/* 1. Header (Event Title) */
+.event-detail header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.event-detail header h1 {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem;
+}
+
+/* 2. Gallery of Images */
+.event-detail .gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.event-detail .gallery .card1 {
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  pointer-events: none;      /* disable click on the card */
+  cursor: default;
+}
+
+.event-detail .gallery .card1 img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  pointer-events: none;      /* disable click on the image */
+  cursor: default;
+}
+
+/* 3. Date & Place */
+.event-detail .date-place {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.event-detail .date-place p {
+  font-size: 1rem;
+  color: #f3e8e8;
+  margin: 0;
+}
+
+/* 4. Description */
+.event-detail section.description h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 2px solid #ececec;
+  padding-bottom: 0.25rem;
+}
+
+.event-detail section.description p {
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+/* 5. Artists (if present) */
+.event-detail section.artists {
+  margin-bottom: 2rem;
+}
+
+.event-detail section.artists h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid #ececec;
+  padding-bottom: 0.25rem;
+}
+
+.event-detail section.artists ul {
+  list-style: disc inside;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.event-detail section.artists li {
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+  color: #ebe4e4;
+}
+
+/* 6. Back link (only clickable element) */
+.event-detail footer {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.event-detail footer a {
+  display: inline-block;
+  text-decoration: none;
+  color: #007acc;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: 1px solid #007acc;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+  pointer-events: auto;      /* re-enable click */
+  cursor: pointer;
+}
+
+.event-detail footer a:hover {
+  background: #007acc;
+  color: #fff;
+}

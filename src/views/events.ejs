@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>All Events</title>
+  <link rel="stylesheet" href="/css/cards.css" />
+</head>
+<body>
+  <main class="cards-container">
+    <% events.forEach(event => { %>
+      <a href="/events/<%= event.slug %>" class="card1">
+        <% if (event.imageUrl) { %>
+          <img src="<%= event.imageUrl %>"
+               alt="<%= event.name %>"
+               class="card1-img">
+        <% } else { %>
+          <div class="card1-img placeholder">No Image</div>
+        <% } %>
+        <div class="card1-body">
+          <h3 class="card1-title"><%= event.name %></h3>
+          <p class="card1-date"><%= event.date.toDateString() %></p>
+          <p class="card1-place"><%= event.place %></p>
+        </div>
+      </a>
+    <% }) %>
+  </main>
+</body>
+</html>
