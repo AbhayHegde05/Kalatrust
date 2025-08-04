@@ -1,8 +1,6 @@
 // models/mediaModel.js
-
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const { makeEmbedUrl } = require('../utils/driveUtils');
 
 const MediaSchema = new Schema({
   program: {
@@ -10,14 +8,14 @@ const MediaSchema = new Schema({
     ref: 'Program',
     required: true
   },
-  driveLink: {
+  url: {           // ✅ Cloudinary URL
     type: String,
     required: true,
     trim: true
   },
   mediaType: {
     type: String,
-    enum: ['drive-img', 'drive-video'],
+    enum: ['image', 'video'], // ✅ Use clean types
     required: true
   },
   caption: {
@@ -27,22 +25,10 @@ const MediaSchema = new Schema({
   uploadedAt: {
     type: Date,
     default: Date.now
-  },
-  url:{ type: String, required: true }
+  }
 }, {
   timestamps: true,
-  collection: 'media'   // ← Explicitly set the collection name here
-});
-
-MediaSchema.pre('validate', function (next) {
-  if (!this.url && this.driveLink) {
-    const embed = makeEmbedUrl(this.driveLink, this.mediaType);
-    if (!embed) {
-      return next(new Error('Invalid Drive link for mediaType ' + this.mediaType));
-    }
-    this.url = embed;
-  }
-  next();
+  collection: 'media'
 });
 
 module.exports = mongoose.model('Media', MediaSchema);

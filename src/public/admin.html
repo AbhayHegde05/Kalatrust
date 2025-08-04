@@ -107,41 +107,42 @@
         return div;
       }
 
-      function createMediaBlock() {
-        const div = document.createElement('div');
-        div.className = 'media-block';
+          function createMediaBlock() {
+      const div = document.createElement('div');
+      div.className = 'media-block';
+          
+      const link = document.createElement('input');
+      link.type = 'text';
+      link.placeholder = 'Cloudinary image link';
+      link.className = 'drive-link';
+          
+      const select = document.createElement('select');
+      select.className = 'media-type';
+      [
+        { v: 'image', t: 'Image' }
+        // add video type if needed
+      ].forEach(o => {
+        const opt = document.createElement('option');
+        opt.value = o.v;
+        opt.textContent = o.t;
+        select.appendChild(opt);
+      });
+    
+      const caption = document.createElement('input');
+      caption.type = 'text';
+      caption.placeholder = 'Caption (optional)';
+      caption.className = 'caption';
+    
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = 'Remove';
+      btn.className = 'remove-btn';
+      btn.onclick = () => div.remove();
+    
+      div.append(link, select, caption, btn);
+      return div;
+    }
 
-        const link = document.createElement('input');
-        link.type = 'text';
-        link.placeholder = 'Google Drive link';
-        link.className = 'drive-link';
-
-        const select = document.createElement('select');
-        select.className = 'media-type';
-        [
-          { v: 'drive-img',   t: 'Image' },
-          { v: 'drive-video', t: 'Video' }
-        ].forEach(o => {
-          const opt = document.createElement('option');
-          opt.value = o.v;
-          opt.textContent = o.t;
-          select.appendChild(opt);
-        });
-
-        const caption = document.createElement('input');
-        caption.type = 'text';
-        caption.placeholder = 'Caption (optional)';
-        caption.className = 'caption';
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = 'Remove';
-        btn.className = 'remove-btn';
-        btn.onclick = () => div.remove();
-
-        div.append(link, select, caption, btn);
-        return div;
-      }
 
       addArtistBtn.addEventListener('click', () =>
         artistsContainer.appendChild(createArtistBlock())
