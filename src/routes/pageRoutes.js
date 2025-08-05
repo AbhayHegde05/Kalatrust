@@ -7,12 +7,14 @@ const Program        = require('../models/programModel');
 const Media          = require('../models/mediaModel');
 const { ensureAuth } = require('../middleware/auth');
 
+
+
 const publicDir = path.resolve(__dirname, '..', 'public');
 
 // — Static pages
 router.get('/',       (req, res) => res.sendFile(path.join(publicDir, 'index.html')));
 router.get('/about',  (req, res) => res.sendFile(path.join(publicDir, 'about.html')));
-router.get('/gallery',(req, res) => res.sendFile(path.join(publicDir, 'gallery.html')));
+
 router.get('/contact',(req, res) => res.sendFile(path.join(publicDir, 'contact.html')));
 
 // — List all events with their media
@@ -76,5 +78,15 @@ router.use(
   ensureAuth,
   express.static(path.join(publicDir, 'admin'))
 );
+
+router.get('/gallery', async (req, res) => {
+  try {
+    const item = await Media.find(); // Assuming Gallery is your model
+    res.render('gallery', { media : item });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;

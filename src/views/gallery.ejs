@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Media Gallery</title>
+  <link rel = "stylesheet" href="/css/style.css" />
+  <style>
+    /* body {
+      font-family: sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
+    } */
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      padding: 10px 20px;
+      border: none;
+      background-color: #ddd;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+
+    .tabs button.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .gallery-section {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      padding: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .gallery-section.active {
+      display: grid;
+    }
+
+    .media-item {
+      background-color: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .media-item img,
+    .media-item video {
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+    }
+
+    .caption {
+      text-align: center;
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    /* .media-video {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      object-fit: cover;
+    } */
+
+  </style>
+</head>
+<body class="black-bg">
+   <header>
+    <div class="logo">
+      <span><img src="images/logo.png" class="logo-img" alt="" />ಸರಸ್ವತಿ ಕಲಾ ಟ್ರಸ್ಟ್</span>
+    </div>
+    <div class="menu-toggle" id="menu-toggle"><span></span><span></span><span></span></div>
+     <nav>
+        <ul id="nav-list">
+          <li><a href="/">ಹೋಮ್</a></li>
+          <li><a href="/about">ನಮ್ಮ ಬಗ್ಗೆ </a></li>
+          <li><a href="/events">ಕಾರ್ಯಕ್ರಮಗಳು </a></li>
+          <li><a href="/gallery">ಚಿತ್ರಭಂಢಾರ</a></li>
+          <li><a href="/contact">ಸಂಪರ್ಕಿಸಿ </a></li>
+        </ul>
+    </nav>
+  </header>
+
+
+  <h1>ಚಿತ್ರಭಂಢಾರ</h1>
+
+  <div class="tabs">
+    <button id="btn-image" onclick="showGallery('image')">Images</button>
+    <button id="btn-video" onclick="showGallery('video')">Videos</button>
+  </div>
+
+  <div id="image-gallery" class="gallery-section">
+    <% media.forEach(item => { %>
+      <% if (item.mediaType === 'image') { %>
+        <div class="media-item">
+          <img src="<%= item.url %>" alt="Image" />
+          <% if (item.caption) { %>
+            <div class="caption"><%= item.caption %></div>
+          <% } %>
+        </div>
+      <% } %>
+    <% }); %>
+  </div>
+
+  <div id="video-gallery" class="gallery-section">
+    <% media.forEach(item => { %>
+      <% if (item.mediaType === 'video') { %>     
+        <div class="video-grid">
+            
+        <video controls width="600" height="400" class="media-video">
+            <source src="<%= item.url %>" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+
+          <% if (item.caption) { %>
+            <div class="caption"><%= item.caption %></div>
+          <% } %>
+        </div>
+      <% } %>
+    <% }); %>
+  </div>
+
+  <script>
+    function showGallery(type) {
+      document.getElementById('image-gallery').classList.remove('active');
+      document.getElementById('video-gallery').classList.remove('active');
+      document.getElementById('btn-image').classList.remove('active');
+      document.getElementById('btn-video').classList.remove('active');
+
+      if (type === 'image') {
+        document.getElementById('image-gallery').classList.add('active');
+        document.getElementById('btn-image').classList.add('active');
+      } else {
+        document.getElementById('video-gallery').classList.add('active');
+        document.getElementById('btn-video').classList.add('active');
+      }
+    }
+
+    // Default view: images
+    showGallery('image');
+  </script>
+</body>
+</html>

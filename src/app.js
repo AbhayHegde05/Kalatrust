@@ -17,7 +17,10 @@ const app = express()
 connectDB()
 
 // View engine & parsers
-app.set('views', path.join(__dirname, 'views'))
+
+app.set('views', path.join(__dirname, 'views'));
+
+
 app.set('view engine', 'ejs')
 app.use(express.json(), express.urlencoded({ extended: true }))
 
