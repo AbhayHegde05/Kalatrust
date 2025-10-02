@@ -17,7 +17,7 @@ connectDB();
 app.use(cors({
   // This is the corrected line:
   // Allow requests from your React frontend's origin
-  origin: 'http://localhost:5173', 
+  origin: process.env.CORS_ORIGIN, 
   credentials: true
 }));
 
