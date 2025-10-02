@@ -1,9 +1,15 @@
 import axios from 'axios';
 
+// Vite exposes environment variables on the `import.meta.env` object.
+// This line correctly reads the variable from your .env.local file (for local)
+// or from the Vercel environment variables (for production).
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api';
+
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api', // Ensure this matches your backend port
+  baseURL: API_URL,
   withCredentials: true,
 });
+
 
 // --- PUBLIC API FUNCTIONS ---
 export const getEvents = () => api.get('/events');
