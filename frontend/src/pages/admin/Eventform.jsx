@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-// Corrected Imports:
 import { getAdminEvent, createAdminEvent, updateAdminEvent, uploadFile, addMediaToEvent, deleteMedia } from '../../services/api';
 import './Admin.css';
 
 const EventForm = () => {
-    // The entire logic of this component remains the same.
-    // Only the import statement at the top needed to be corrected.
   const [eventData, setEventData] = useState({ name: '', date: '', place: '', description: '', artists: [''] });
   const [media, setMedia] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -76,7 +73,6 @@ const EventForm = () => {
     }
 
     try {
-      // API now returns an array of uploaded file data
       const uploadRes = await uploadFile(formData); 
       
       const newMediaItems = uploadRes.data.map(file => ({
@@ -85,7 +81,6 @@ const EventForm = () => {
         mediaType: file.mediaType,
       }));
 
-      // Create all media items in the database in one go
       const creationPromises = newMediaItems.map(item => addMediaToEvent(item));
       const createdMediaResponses = await Promise.all(creationPromises);
       const createdMedia = createdMediaResponses.map(res => res.data);
@@ -97,7 +92,7 @@ const EventForm = () => {
       setError("File upload failed. Please try again.");
     } finally {
       setIsUploading(false);
-      e.target.value = null; // Reset file input
+      e.target.value = null;
     }
   };
 
@@ -145,8 +140,7 @@ const EventForm = () => {
     }
   };
 
-    // The rest of the component's JSX remains the same...
-    return (
+  return (
     <div className="admin-container">
       <div className="admin-header">
         <h1>{isEditMode ? 'Edit Event' : 'Create New Event'}</h1>
@@ -195,17 +189,16 @@ const EventForm = () => {
         </div>
 
         <div className={`admin-card media-card ${!isEditMode ? 'disabled' : ''}`}>
-      <h3>Media Management</h3>
-      {!isEditMode ? (
-        <p>Please save the event details first to enable media uploads.</p>
-      ) : (
-        <>
-          <div className="form-group">
-            <label htmlFor="media-upload">Upload Images or Videos</label>
-            {/* Add 'multiple' attribute to the input */}
-            <input type="file" id="media-upload" onChange={handleFileUpload} disabled={isUploading} multiple />
-            {isUploading && <p>Uploading, please wait...</p>}
-          </div>
+          <h3>Media Management</h3>
+          {!isEditMode ? (
+            <p>Please save the event details first to enable media uploads.</p>
+          ) : (
+            <>
+              <div className="form-group">
+                <label htmlFor="media-upload">Upload Images or Videos</label>
+                <input type="file" id="media-upload" onChange={handleFileUpload} disabled={isUploading} multiple />
+                {isUploading && <p>Uploading, please wait...</p>}
+              </div>
               <div className="media-grid">
                 {media.map(m => (
                   <div key={m._id} className="media-item-admin">

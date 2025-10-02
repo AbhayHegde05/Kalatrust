@@ -11,7 +11,7 @@ import Contact from './pages/Contact.jsx';
 import Login from './pages/admin/Login.jsx';
 import AdminLayout from './pages/admin/AdminLayout.jsx';
 import Dashboard from './pages/admin/Dashboard.jsx';
-import EventForm from './pages/admin/EventForm.jsx';
+import EventForm from './pages/admin/Eventform.jsx';
 
 function App() {
   return (
