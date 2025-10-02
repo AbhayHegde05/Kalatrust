@@ -1,0 +1,24 @@
+.contact-page {
+  text-align: center;
+}
+
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.contact-card {
+  background-color: #ffffff10;
+  border: 1px solid #ffffff30;
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+}
+
+.contact-card h3 {
+  margin-top: 0;
+}

@@ -1,0 +1,77 @@
+.gallery-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.tabs {
+  margin: 2rem 0;
+}
+
+.tabs button {
+  padding: 10px 20px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 8px;
+  margin: 0 5px;
+  transition: background-color 0.3s ease;
+}
+
+.tabs button.active {
+  background-color: var(--accent-color);
+  color: var(--text-dark);
+  font-weight: bold;
+}
+
+/* --- New Masonry Layout --- */
+.gallery-grid {
+  /* Define the number of columns and the gap between them */
+  column-count: 3;
+  column-gap: 1.5rem;
+}
+
+.gallery-item {
+  margin-bottom: 1.5rem;
+  /* Prevents an item from breaking across columns */
+  break-inside: avoid;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.gallery-item img,
+.gallery-item video {
+  /* This is the key: width is 100% of the column, height is automatic */
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.caption {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* --- Responsive Adjustments --- */
+
+/* For tablets */
+@media (max-width: 900px) {
+  .gallery-grid {
+    column-count: 2;
+  }
+}
+
+/* For mobile phones */
+@media (max-width: 600px) {
+  .gallery-grid {
+    column-count: 1;
+  }
+}
