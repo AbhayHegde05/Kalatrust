@@ -28,7 +28,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
 
           {/* Admin Login Route */}
-          <Route path="/admin" element={<Login />} />
+           <Route path="/admin/login" element={<Login />} />
 
           {/* Protected Admin Routes */}
           <Route path="/admin" element={<AdminLayout />}>
