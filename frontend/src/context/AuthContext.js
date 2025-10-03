@@ -1,26 +1,25 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { checkUser } from '../services/auth';
+import { checkUser as checkUserService } from '../services/auth';
 import Loader from '../components/Loader';
 
-// Create the context
 const AuthContext = createContext(null);
 
-// Create a provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Start with loading true
 
   useEffect(() => {
-    // Check for an existing session when the app first loads
+    // This effect runs only once when the app starts
     const verifySession = async () => {
       try {
-        const currentUser = await checkUser();
+        const currentUser = await checkUserService();
         if (currentUser) {
           setUser(currentUser);
         }
       } catch (error) {
-        console.error("No active session found.");
+        console.error("No active session on initial load.");
       } finally {
+        // Critical: Set loading to false after the check is complete
         setLoading(false);
       }
     };
@@ -34,8 +33,8 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
   };
-  
-  // While checking the initial session, show a loader
+
+  // While the initial session check is running, show a full-page loader
   if (loading) {
     return <Loader />;
   }
@@ -47,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Create a custom hook to easily use the context
+// This custom hook makes it easy for any component to access the auth state
 export const useAuth = () => {
   return useContext(AuthContext);
 };
