@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../services/auth'; // Corrected import path
+import { login } from '../../services/auth';
 import './Admin.css';
 
 const Login = () => {
@@ -11,17 +11,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors on a new submission
+    setError('');
     try {
       const response = await login({ username, password });
       if (response.success) {
-        // Navigate to the admin dashboard on successful login
+        // This is the correct path for the dashboard
         navigate('/admin/dashboard');
       }
     } catch (err) {
-      // This block will catch network errors or 4xx/5xx responses from the API
       setError('Invalid credentials. Please try again.');
-      console.error('Login failed:', err);
     }
   };
 
@@ -32,23 +30,11 @@ const Login = () => {
         {error && <p className="error">{error}</p>}
         <div className="form-group">
           <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            required
-          />
+          <input type="text" id="username" value={username} onChange={e => setUsername(e.target.value)} required />
         </div>
         <div className="form-group">
           <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
+          <input type="password" id="password" value={password} onChange={e => setPassword(e.target.value)} required />
         </div>
         <button type="submit">Log In</button>
       </form>
