@@ -1,37 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { checkUser } from '../../services/auth';
-import Loader from '../../components/Loader';
+import React, { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext'; // Import the useAuth hook
 
 const AdminLayout = () => {
+  const { user } = useAuth(); // Get the current user from the context
   const navigate = useNavigate();
-  const location = useLocation();
-  const [isAuth, setIsAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const verifySession = async () => {
-      const user = await checkUser();
-      if (user) {
-        setIsAuth(true);
-      } else {
-        // If no user is authenticated, redirect to the login page
-        navigate('/admin/login');
-      }
-      setLoading(false);
-    };
+    // If the context has no user, redirect to login
+    if (!user) {
+      navigate('/admin/login');
+    }
+  }, [user, navigate]);
 
-    // We only need to run this check once when the layout mounts
-    verifySession();
-  }, [navigate]);
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  // If authentication is confirmed, render the protected admin pages
-  // Otherwise, render nothing (as the navigate function will have already redirected)
-  return isAuth ? <Outlet /> : null;
+  // If there is a user, render the protected pages
+  // Otherwise, render nothing while it redirects
+  return user ? <Outlet /> : null;
 };
 
 export default AdminLayout;

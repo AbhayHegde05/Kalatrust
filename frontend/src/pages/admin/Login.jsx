@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../services/auth';
+import { login as loginService } from '../../services/auth';
+import { useAuth } from '../../context/AuthContext'; // Import the useAuth hook
 import './Admin.css';
 
 const Login = () => {
@@ -8,14 +9,17 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth(); // Get the login function from the context
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      const response = await login({ username, password });
+      const response = await loginService({ username, password });
       if (response.success) {
-        // This is the correct path for the dashboard
+        // Update the global state with the user data
+        login(response.user);
+        // Navigate to the dashboard
         navigate('/admin/dashboard');
       }
     } catch (err) {

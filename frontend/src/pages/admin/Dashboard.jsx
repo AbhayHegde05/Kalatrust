@@ -8,6 +8,7 @@ const Dashboard = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     loadEvents();
@@ -38,12 +39,11 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    await logout();
-    // Redirect to the correct login page after logout
+   const handleLogout = async () => {
+    await logoutService(); // Call the API to clear the backend session
+    logout(); // Clear the frontend state
     navigate('/admin/login');
   };
-
   // Define date formatting options for Kannada
   const kannadaDateOptions = {
     year: 'numeric',
