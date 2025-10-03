@@ -10,14 +10,27 @@ const ProgramSchema = new mongoose.Schema({
   artists: [{ type: String, trim: true }]
 }, { timestamps: true });
 
-// Middleware to automatically create a URL-friendly slug from the event name
+// This middleware runs before a document is saved
 ProgramSchema.pre('save', async function(next) {
-  if (this.isModified('name') || !this.slug) {
-    this.slug = slugify(this.name, {
+  // Only generate a new slug if the name has changed or it's a new event
+  if (this.isModified('name') || this.isNew) {
+    let baseSlug = slugify(this.name, {
       lower: true,
       strict: true,
       remove: /[*+~.()'"!:@]/g
     });
+    
+    let slug = baseSlug;
+    let counter = 1;
+
+    // This loop checks if a document with the same slug already exists
+    // and appends a number until a unique slug is found.
+    while (await this.constructor.findOne({ slug })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+    
+    this.slug = slug;
   }
   next();
 });
