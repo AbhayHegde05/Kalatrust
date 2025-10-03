@@ -40,7 +40,8 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/admin');
+    // Redirect to the correct login page after logout
+    navigate('/admin/login');
   };
 
   // Define date formatting options for Kannada
