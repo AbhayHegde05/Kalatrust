@@ -33,7 +33,7 @@ const About = () => {
       </div>
 
       <div className="section-card">
-        <h3>Meet the Team</h3>
+        <h3>ನಮ್ಮ ಸಮಿತಿ </h3>
         <div className="team-grid">
           <div className="team-member"><p>ಪ್ರಸನ್ನ ಪರಮೇಶ್ವರ ಹೆಗಡೆ</p><span>ಅಧ್ಯಕ್ಷರು</span></div>
           <div className="team-member"><p>ಗೌತಮ್ ಆರ್ ಹೆಗಡೆ</p><span>ಕಾರ್ಯದರ್ಶಿ</span></div>
@@ -41,6 +41,7 @@ const About = () => {
           <div className="team-member"><p>M P ಹೆಗಡೆ</p><span>ಸದಸ್ಯ</span></div>
           <div className="team-member"><p>ಭುವನೇಶ್ವರಿ ಹೆಗಡೆ</p><span>ಸದಸ್ಯ</span></div>
           <div className="team-member"><p>ಗಂಗಾಧರ ನಾಯ್ಕ್</p><span>ಸದಸ್ಯ</span></div>
+          <div className="team-member"><p>ಪೂರುಷೋತ್ತಮ ಹೆಗಡೆ</p><span>ಸದಸ್ಯರು</span></div>
         </div>
       </div>
     </div>

@@ -16,6 +16,13 @@ const Contact = () => {
           <p>ಕಾರ್ಯದರ್ಶಿ</p>
           <p>Phone: <a href="tel:+919481284793">+91 94812 84793</a></p>
         </div>
+        <div className="contact-card bank-details-card">
+          <h3>ಬ್ಯಾಂಕ್ ವಿವರ </h3>
+          <p>ಬ್ಯಾಂಕ್ ನ ಹೆಸರು : </p>
+          <p>ಖಾತೆ ಸಂಖ್ಯೆ : </p>
+          <p>ಐ ‌ಎಫ್‌ ಎಸ್ ಸಿ : </p>
+
+        </div>
       </div>
     </div>
   );
