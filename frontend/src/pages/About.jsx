@@ -5,30 +5,29 @@ const About = () => {
   return (
     <div className="about-main">
       <div className="section-card">
-        <h3>ನಮ್ಮ ಬಗ್ಗೆ</h3>
-        <p>ಸರಸ್ವತಿ ಕಲಾ ಟ್ರಸ್ಟ್ ಎಂಬುದು ಅಧಿಕೃತವಾಗಿ 09-09-2022 ರಂದು ಶ್ರೀ ಪ್ರಸನ್ನ ಪರಮೇಶ್ವರ ಹೆಗಡೆಯವರ ಅಧ್ಯಕ್ಷತೆಯಲ್ಲಿ, ಹಲವು ಸಹಕಾರಿ ಮನೋಭಾವದ ಸದಸ್ಯರುಗಳ ಪಾಲ್ಗೊಳ್ಳುವಿಕೆಯಿಂದ ಪ್ರಾರಂಭವಾಯಿತು.</p>
+        <h3>About Us</h3>
+        <p>Saraswati Kala Trust began on 09-09-2022 under the leadership of Mr. Prasanna Parameshwara Hegde, with committed collaborators joining to preserve and promote Karnataka’s classical folk heritage.</p>
       </div>
 
       <div className="section-card">
-        <h3>ನಮ್ಮ ಧ್ಯೇಯಗಳು</h3>
+        <h3>Our Mission</h3>
         <ul>
-          <li>ಯಕ್ಷಗಾನ, ಜನಪದ, ಸಂಗೀತ ಮತ್ತು ನಾಟಕ ಮೊದಲಾದ ವಿವಿಧ ಕಲಾ ರೂಪಗಳನ್ನು ಕಲಿಸಲು ಮತ್ತು ಪ್ರಚಾರ ಮಾಡಲು ಅಂತಹ ಪ್ರಯತ್ನಗಳ ಮೂಲಕ ಪ್ರಾದೇಶಿಕ ಹಾಗೂ ಪುರಾತನ ಕಲಾ ರೂಪಗಳ ಅಭಿವೃದ್ಧಿಗೆ ಸಹಾಯ ಮಾಡುವುದು.</li>
-          <li>ಗ್ರಾಮೀಣ ಪ್ರದೇಶಗಳಲ್ಲಿ ಕಡಿಮೆ ಖರ್ಚಿನಲ್ಲಿ ಸಾಂಸ್ಕೃತಿಕ ಚಟುವಟಿಕೆಗಳನ್ನು ನಡೆಸುವುದು.</li>
-          <li>ಈ ಕಲಾ ರೂಪಗಳನ್ನು ಮಕ್ಕಳಿಗೆ ಮತ್ತು ಯುವಕರಿಗೆ ಕಲಿಸುವ ಮೂಲಕ ಮುಂದಿನ ಪೀಳಿಗೆಗೆ ಕಳಿಸಲು ಸಾಂಸ್ಕೃತಿಕ ಪರಂಪರೆಯ ಪೋಷಣೆ ಮತ್ತು ಸಂಚಲನ.</li>
-          <li>ಹೆಚ್ಚಿನ ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮಗಳ ಮೂಲಕ ಹೊಸ ಪ್ರತಿಭೆಗಳಿಗೆ ಮತ್ತು ಕಲಾವಿದರಿಗೆ ಅವಕಾಶ ಕಲ್ಪಿಸುವುದು.</li>
-          <li>ಹಿರಿಕಿರಿಯ ಗೌರವಾನ್ವಿತ ಕಲಾವಿದರು ಮತ್ತು ಪ್ರತಿಭೆಗಳನ್ನು ಗುರುತಿಸಿ ಪ್ರಶಂಸಿಸುವುದು.</li>
+          <li>Promote regional and classical performing arts like Yakshagana, folk theatre, music, and drama through education and cultural outreach.</li>
+          <li>Present accessible cultural programs in rural and urban neighborhoods at minimal cost.</li>
+          <li>Empower future generations by teaching art forms to children and youth and nurturing cultural continuity.</li>
+          <li>Open opportunities for emerging artists through festivals, workshops and mentorship programs.</li>
+          <li>Honor revered masters and spotlight new talent across our artistic community.</li>
         </ul>
       </div>
 
       <div className="section-card">
-        <h3>ನಮ್ಮ ಉದ್ದೇಶ</h3>
+        <h3>Our Vision</h3>
         <ul>
-          <li>ಸಾಂಸ್ಕೃತಿಕ ಚಟುವಟಿಕೆಯ ಜೊತೆಗೆ ಆರೋಗ್ಯಕ್ಕೆ ಸಂಬಂಧಪಟ್ಟಂತೆ ಯೋಗ, ವ್ಯಾಯಾಮ, ಧ್ಯಾನ, ವ್ಯಕ್ತಿತ್ವ ವಿಕಸನದ ಬಗ್ಗೆ ಅರಿವು ಮೂಡಿಸುವುದು.</li>
-          <li>ಪರಿಸರ ಸಂರಕ್ಷಣೆ ಹಾಗೂ ಅವುಗಳ ಬಗ್ಗೆ ಜನಜಾಗೃತಿಗೆ ಸಂಬಂಧಪಟ್ಟ ಕೆಲಸಗಳನ್ನು ಕೈಗೊಳ್ಳುವುದು.</li>
-          <li>ಅನಾಥ, ಅಶಕ್ತ, ಮತ್ತು ವೃದ್ಧರ ಸೇವೆ ದೇವರ ಸೇವೆ ಎಂದು ಭಾವಿಸಿ ಅವರ ಬದುಕಿಗೆ ಸಹಾಯ ಒದಗಿಸುವುದು.</li>
-          <li>ಹಳ್ಳಿ ಗೋವುಗಳ ಸಾಕಣೆ ಮತ್ತು ರಕ್ಷಣೆಯನ್ನು ಉತ್ತೇಜಿಸುವುದು.</li>
-          <li>ರಾಸಾಯನಿಕ ಮುಕ್ತ ಬೇಸಾಯಕ್ಕೆ ಒತ್ತು ನೀಡಿ ಸಾವಯವ ಕೃಷಿಯನ್ನು ಪ್ರೋತ್ಸಾಹಿಸುವುದು.</li>
-          <li>ಕೃಷಿ ಕಾರ್ಯಾಗಾರ ಚಟುವಟಿಕೆಗಳನ್ನು ನಡೆಸುವುದು ಮತ್ತು ಉತ್ತೇಜಿಸುವುದು.</li>
+          <li>Integrate cultural practice with wellness: yoga, meditation and holistic living for artists and audiences.</li>
+          <li>Lead eco-conscious initiatives tied to sustainability and local heritage preservation.</li>
+          <li>Support vulnerable and elderly communities through art-based service and social care.</li>
+          <li>Promote organic farming and village livestock traditions alongside cultural festivals.</li>
+          <li>Organize workshops, training camps and collaborative events for arts and agriculture.</li>
         </ul>
       </div>
 

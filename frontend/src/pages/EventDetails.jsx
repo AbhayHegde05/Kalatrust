@@ -77,13 +77,13 @@ const EventDetails = () => {
 
       <div className="details-grid">
         <div className="detail-card description-card">
-          <h2>ಮಾಹಿತಿ</h2>
+          <h2>Event Overview</h2>
           <p>{event.description || "No description provided."}</p>
         </div>
 
         {event.artists && event.artists.length > 0 && (
           <div className="detail-card artists-card">
-            <h2>ಕಲಾವಿದರು</h2>
+            <h2>Featured Artists</h2>
             <ul>
               {event.artists.map((artist, index) => <li key={index}>{artist}</li>)}
             </ul>

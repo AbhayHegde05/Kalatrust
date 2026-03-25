@@ -85,6 +85,34 @@
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
+.yakshagana-highlight {
+  margin: 2rem 1rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255, 160, 0, 0.2), rgba(0, 44, 89, 0.8));
+  padding: 2rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.35);
+}
+
+.yakshagana-content h2 {
+  margin: 0 0 0.8rem;
+  font-size: 2rem;
+}
+
+.yakshagana-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 760px;
+  margin-bottom: 1rem;
+}
+
+.yakshagana-content .btn-discover {
+  background: linear-gradient(135deg, #f8cc00, #e67e22);
+  color: #1b1b1b;
+}
+
+
 .card .info {
   font-size: 1.5rem;
   line-height: 1.4;
