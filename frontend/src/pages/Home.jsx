@@ -1,41 +1,78 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Home.css';
 import bannerBackground from '../assets/background.png';
 
 const Home = () => {
   return (
-    <div className="home-container">
-      <section className="banner" style={{ backgroundImage: `url(${bannerBackground})` }}></section>
-      
-      <section className="hero">
-        <div className="hero-content">
-          <h1>Yakshagana: The Living Drama of Karnataka</h1>
-          <p className="hero-subtitle">Discover the vibrant beats of culture, art and music through traditional and new-age expression.</p>
-          <Link to="/events" className="btn-discover">Explore Events & Performances</Link>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${bannerBackground})` }}
+        >
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
+        <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+          <h1 className="hero-text mb-6">
+            A Mirror to Indian Art & Culture
+          </h1>
+          <p className="text-xl md:text-2xl text-cream/90 mb-8 font-light">
+            Preserving the timeless traditions of Yakshagana, Carnatic Music, and Folk Arts for generations to come
+          </p>
+          <Link to="/events" className="btn-primary inline-block">
+            Explore Events
+          </Link>
         </div>
       </section>
 
-      <section className="cards-section">
-        <div className="card">
-          <h2>🎭 Yakshagana</h2>
-          <p className="info">A dramatic spectacle with texture, rhythm, and mythic stories.</p>
-        </div>
-        <div className="card">
-          <h2>🎶 Folk & Music</h2>
-          <p className="info">Rooted melodies and dynamic rhythms from Karnataka’s rich tradition.</p>
-        </div>
-        <div className="card">
-          <h2>🌿 Culture</h2>
-          <p className="info">Sustaining heritage with learning for the next generation.</p>
+      {/* Core Pillars */}
+      <section className="py-20 px-4 bg-cream">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-serif text-center text-deep-terracotta mb-16">
+            Our Cultural Pillars
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="card text-center">
+              <div className="text-6xl mb-4">🎭</div>
+              <h3 className="text-2xl font-serif mb-4">Yakshagana</h3>
+              <p className="text-gray-600">
+                The dramatic dance-theatre tradition that brings ancient epics to life through vibrant costumes, music, and storytelling.
+              </p>
+            </div>
+            <div className="card text-center">
+              <div className="text-6xl mb-4">🎵</div>
+              <h3 className="text-2xl font-serif mb-4">Carnatic Music</h3>
+              <p className="text-gray-600">
+                Classical South Indian music tradition featuring intricate ragas, talas, and devotional compositions.
+              </p>
+            </div>
+            <div className="card text-center">
+              <div className="text-6xl mb-4">🌿</div>
+              <h3 className="text-2xl font-serif mb-4">Folk Arts</h3>
+              <p className="text-gray-600">
+                Rich tapestry of regional folk traditions, crafts, and performing arts that reflect local heritage.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="yakshagana-highlight">
-        <div className="yakshagana-content">
-          <h2>Yakshagana Spotlight</h2>
-          <p>Yakshagana is the heart of our mission — an epic narrative art combining dance, music, dialogue and vibrant costumes. We champion new productions, school training programs, and intergenerational performances.</p>
-          <Link to="/about" className="btn-discover" style={{ marginTop: '1rem' }}>Learn More About Our Yakshagana Initiatives</Link>
+      {/* Call to Action */}
+      <section className="py-20 px-4 bg-deep-terracotta text-cream">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-serif mb-6">Join Our Cultural Journey</h2>
+          <p className="text-xl mb-8 opacity-90">
+            Experience the depth of Indian classical arts through our events, workshops, and community programs.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/events" className="bg-gold hover:bg-yellow-500 text-deep-terracotta font-semibold py-3 px-8 rounded-lg transition-all duration-300">
+              View Events
+            </Link>
+            <Link to="/contact" className="border-2 border-cream text-cream hover:bg-cream hover:text-deep-terracotta font-semibold py-3 px-8 rounded-lg transition-all duration-300">
+              Get Involved
+            </Link>
+          </div>
         </div>
       </section>
     </div>
