@@ -89,7 +89,11 @@ const EventForm = () => {
       showNotification(`${files.length} file(s) uploaded successfully!`);
     } catch (err) {
       console.error("Upload failed", err);
-      setError("File upload failed. Please try again.");
+      if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+        setError("Upload timed out. Please try again with smaller files or check your connection.");
+      } else {
+        setError("File upload failed. Please try again.");
+      }
     } finally {
       setIsUploading(false);
       e.target.value = null;

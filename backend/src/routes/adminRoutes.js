@@ -110,9 +110,12 @@ router.post('/upload', upload.array('files', 10), async (req, res) => {
       return res.status(400).json({ message: 'No files uploaded.' });
     }
 
-    // Map each file to an upload promise
+    // Map each file to an upload promise with timeout
     const uploadPromises = req.files.map(file => 
-      cloudinary.uploader.upload(file.path, { resource_type: 'auto' })
+      cloudinary.uploader.upload(file.path, { 
+        resource_type: 'auto',
+        timeout: 60000 // 60 second timeout
+      })
     );
 
     // Wait for all uploads to complete
