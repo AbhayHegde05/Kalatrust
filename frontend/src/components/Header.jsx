@@ -1,30 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from '../assets/logo.png';
 import './Header.css';
 
+const navItems = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/events', label: 'Events' },
+  { to: '/gallery', label: 'Gallery' },
+  { to: '/contact', label: 'Contact' },
+];
+
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="app-header">
-      <NavLink to="/" className="logo">
-        <img src={logo} alt="Saraswati Kala Trust Logo" className="logo-img" />
-        <span>ಸರಸ್ವತಿ ಕಲಾ ಟ್ರಸ್ಟ್</span>
-      </NavLink>
-      <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-        <span></span><span></span><span></span>
+    <header className={`site-header ${scrolled ? 'site-header--scrolled' : ''}`}>
+      <div className="header-inner">
+        {/* Logo */}
+        <NavLink to="/" className="header-logo" onClick={closeMenu}>
+          <img src={logo} alt="Saraswathi Kala Trust" className="header-logo-img" />
+          <span className="header-logo-text">Saraswathi Kala Trust</span>
+        </NavLink>
+
+        {/* Desktop Nav */}
+        <nav className="header-nav">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                `header-nav-link ${isActive ? 'header-nav-link--active' : ''}`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Mobile toggle */}
+        <button
+          className={`header-burger ${menuOpen ? 'header-burger--open' : ''}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
-      <nav className={menuOpen ? 'open' : ''}>
-        <ul>
-          <li><NavLink to="/" onClick={closeMenu}>ಹೋಮ್</NavLink></li>
-          <li><NavLink to="/about" onClick={closeMenu}>ನಮ್ಮ ಬಗ್ಗೆ</NavLink></li>
-          <li><NavLink to="/events" onClick={closeMenu}>ಕಾರ್ಯಕ್ರಮಗಳು</NavLink></li>
-          <li><NavLink to="/gallery" onClick={closeMenu}>ಚಿತ್ರಭಂಢಾರ</NavLink></li>
-          <li><NavLink to="/contact" onClick={closeMenu}>ಸಂಪರ್ಕಿಸಿ</NavLink></li>
-        </ul>
-      </nav>
+
+      {/* Mobile Nav */}
+      <div className={`header-mobile-nav ${menuOpen ? 'header-mobile-nav--open' : ''}`}>
+        {navItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            end={item.to === '/'}
+            onClick={closeMenu}
+            className={({ isActive }) =>
+              `header-mobile-link ${isActive ? 'header-mobile-link--active' : ''}`
+            }
+          >
+            {item.label}
+          </NavLink>
+        ))}
+      </div>
     </header>
   );
 };

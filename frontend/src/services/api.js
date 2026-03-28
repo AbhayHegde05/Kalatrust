@@ -8,13 +8,14 @@ const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api'
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  timeout: 60000, // 60 second timeout
 });
-
 
 // --- PUBLIC API FUNCTIONS ---
 export const getEvents = () => api.get('/events');
 export const getEventBySlug = (slug) => api.get(`/events/${slug}`);
 export const getGalleryMedia = () => api.get('/gallery');
+export const submitReview = (slug, data) => api.post(`/events/${slug}/reviews`, data);
 
 // --- ADMIN CRUD API FUNCTIONS ---
 export const getAdminEvents = () => api.get('/admin/programs');

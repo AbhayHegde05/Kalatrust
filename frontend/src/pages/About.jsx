@@ -1,48 +1,122 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import './About.css';
 
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setInView(true); obs.disconnect(); }
+    }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
+
+const leadership = [
+  { name: 'Prasanna Parameshwara Hegde', role: 'President' },
+  { name: 'Gautam R Hegde', role: 'Secretary' },
+  { name: 'Ganapati V Hegde', role: 'Member' },
+  { name: 'M P Hegde', role: 'Member' },
+  { name: 'Bhuvaneshwari Hegde', role: 'Member' },
+  { name: 'Gangadhara Nayak', role: 'Member' },
+  { name: 'Purushottama Hegde', role: 'Member' },
+];
+
+const missionItems = [
+  { icon: '🎭', text: 'Promoting Yakshagana, Folk Arts, and Music for future generations' },
+  { icon: '🏘️', text: 'Organizing accessible cultural programs in rural and urban areas' },
+  { icon: '👶', text: 'Teaching traditional arts to children and youth' },
+  { icon: '⭐', text: 'Supporting emerging artists through festivals and mentorship' },
+  { icon: '🏆', text: 'Honoring master artists and recognizing new talent' },
+];
+
+const developmentItems = [
+  { icon: '🧘', text: 'Integrating yoga, meditation, and wellness with cultural practice' },
+  { icon: '🌱', text: 'Environmental conservation and sustainability initiatives' },
+  { icon: '🤝', text: 'Supporting elderly and orphaned community members' },
+  { icon: '🌾', text: 'Promoting organic farming and traditional livestock care' },
+  { icon: '📚', text: 'Organizing workshops for arts and sustainable agriculture' },
+];
+
 const About = () => {
+  const [missionRef, missionInView] = useInView();
+  const [leaderRef, leaderInView] = useInView();
+
   return (
-    <div className="about-main">
-      <div className="section-card">
-        <h3>ನಮ್ಮ ಬಗ್ಗೆ</h3>
-        <p>ಸರಸ್ವತಿ ಕಲಾ ಟ್ರಸ್ಟ್ ಎಂಬುದು ಅಧಿಕೃತವಾಗಿ 09-09-2022 ರಂದು ಶ್ರೀ ಪ್ರಸನ್ನ ಪರಮೇಶ್ವರ ಹೆಗಡೆಯವರ ಅಧ್ಯಕ್ಷತೆಯಲ್ಲಿ, ಹಲವು ಸಹಕಾರಿ ಮನೋಭಾವದ ಸದಸ್ಯರುಗಳ ಪಾಲ್ಗೊಳ್ಳುವಿಕೆಯಿಂದ ಪ್ರಾರಂಭವಾಯಿತು.</p>
-      </div>
-
-      <div className="section-card">
-        <h3>ನಮ್ಮ ಧ್ಯೇಯಗಳು</h3>
-        <ul>
-          <li>ಯಕ್ಷಗಾನ, ಜನಪದ, ಸಂಗೀತ ಮತ್ತು ನಾಟಕ ಮೊದಲಾದ ವಿವಿಧ ಕಲಾ ರೂಪಗಳನ್ನು ಕಲಿಸಲು ಮತ್ತು ಪ್ರಚಾರ ಮಾಡಲು ಅಂತಹ ಪ್ರಯತ್ನಗಳ ಮೂಲಕ ಪ್ರಾದೇಶಿಕ ಹಾಗೂ ಪುರಾತನ ಕಲಾ ರೂಪಗಳ ಅಭಿವೃದ್ಧಿಗೆ ಸಹಾಯ ಮಾಡುವುದು.</li>
-          <li>ಗ್ರಾಮೀಣ ಪ್ರದೇಶಗಳಲ್ಲಿ ಕಡಿಮೆ ಖರ್ಚಿನಲ್ಲಿ ಸಾಂಸ್ಕೃತಿಕ ಚಟುವಟಿಕೆಗಳನ್ನು ನಡೆಸುವುದು.</li>
-          <li>ಈ ಕಲಾ ರೂಪಗಳನ್ನು ಮಕ್ಕಳಿಗೆ ಮತ್ತು ಯುವಕರಿಗೆ ಕಲಿಸುವ ಮೂಲಕ ಮುಂದಿನ ಪೀಳಿಗೆಗೆ ಕಳಿಸಲು ಸಾಂಸ್ಕೃತಿಕ ಪರಂಪರೆಯ ಪೋಷಣೆ ಮತ್ತು ಸಂಚಲನ.</li>
-          <li>ಹೆಚ್ಚಿನ ಸಾಂಸ್ಕೃತಿಕ ಕಾರ್ಯಕ್ರಮಗಳ ಮೂಲಕ ಹೊಸ ಪ್ರತಿಭೆಗಳಿಗೆ ಮತ್ತು ಕಲಾವಿದರಿಗೆ ಅವಕಾಶ ಕಲ್ಪಿಸುವುದು.</li>
-          <li>ಹಿರಿಕಿರಿಯ ಗೌರವಾನ್ವಿತ ಕಲಾವಿದರು ಮತ್ತು ಪ್ರತಿಭೆಗಳನ್ನು ಗುರುತಿಸಿ ಪ್ರಶಂಸಿಸುವುದು.</li>
-        </ul>
-      </div>
-
-      <div className="section-card">
-        <h3>ನಮ್ಮ ಉದ್ದೇಶ</h3>
-        <ul>
-          <li>ಸಾಂಸ್ಕೃತಿಕ ಚಟುವಟಿಕೆಯ ಜೊತೆಗೆ ಆರೋಗ್ಯಕ್ಕೆ ಸಂಬಂಧಪಟ್ಟಂತೆ ಯೋಗ, ವ್ಯಾಯಾಮ, ಧ್ಯಾನ, ವ್ಯಕ್ತಿತ್ವ ವಿಕಸನದ ಬಗ್ಗೆ ಅರಿವು ಮೂಡಿಸುವುದು.</li>
-          <li>ಪರಿಸರ ಸಂರಕ್ಷಣೆ ಹಾಗೂ ಅವುಗಳ ಬಗ್ಗೆ ಜನಜಾಗೃತಿಗೆ ಸಂಬಂಧಪಟ್ಟ ಕೆಲಸಗಳನ್ನು ಕೈಗೊಳ್ಳುವುದು.</li>
-          <li>ಅನಾಥ, ಅಶಕ್ತ, ಮತ್ತು ವೃದ್ಧರ ಸೇವೆ ದೇವರ ಸೇವೆ ಎಂದು ಭಾವಿಸಿ ಅವರ ಬದುಕಿಗೆ ಸಹಾಯ ಒದಗಿಸುವುದು.</li>
-          <li>ಹಳ್ಳಿ ಗೋವುಗಳ ಸಾಕಣೆ ಮತ್ತು ರಕ್ಷಣೆಯನ್ನು ಉತ್ತೇಜಿಸುವುದು.</li>
-          <li>ರಾಸಾಯನಿಕ ಮುಕ್ತ ಬೇಸಾಯಕ್ಕೆ ಒತ್ತು ನೀಡಿ ಸಾವಯವ ಕೃಷಿಯನ್ನು ಪ್ರೋತ್ಸಾಹಿಸುವುದು.</li>
-          <li>ಕೃಷಿ ಕಾರ್ಯಾಗಾರ ಚಟುವಟಿಕೆಗಳನ್ನು ನಡೆಸುವುದು ಮತ್ತು ಉತ್ತೇಜಿಸುವುದು.</li>
-        </ul>
-      </div>
-
-      <div className="section-card">
-        <h3>ನಮ್ಮ ಸಮಿತಿ </h3>
-        <div className="team-grid">
-          <div className="team-member"><p>ಪ್ರಸನ್ನ ಪರಮೇಶ್ವರ ಹೆಗಡೆ</p><span>ಅಧ್ಯಕ್ಷರು</span></div>
-          <div className="team-member"><p>ಗೌತಮ್ ಆರ್ ಹೆಗಡೆ</p><span>ಕಾರ್ಯದರ್ಶಿ</span></div>
-          <div className="team-member"><p>ಗಣಪತಿ ವಿ ಹೆಗಡೆ</p><span>ಸದಸ್ಯ</span></div>
-          <div className="team-member"><p>M P ಹೆಗಡೆ</p><span>ಸದಸ್ಯ</span></div>
-          <div className="team-member"><p>ಭುವನೇಶ್ವರಿ ಹೆಗಡೆ</p><span>ಸದಸ್ಯ</span></div>
-          <div className="team-member"><p>ಗಂಗಾಧರ ನಾಯ್ಕ್</p><span>ಸದಸ್ಯ</span></div>
-          <div className="team-member"><p>ಪೂರುಷೋತ್ತಮ ಹೆಗಡೆ</p><span>ಸದಸ್ಯರು</span></div>
+    <div className="about-page">
+      {/* Hero */}
+      <div className="about-hero">
+        <div className="about-hero-content">
+          <p className="about-hero-tag animate-fade-in-down">Est. September 9, 2022</p>
+          <h1 className="about-hero-title animate-fade-in-up delay-100">
+            Saraswathi Kala Trust
+          </h1>
+          <p className="about-hero-desc animate-fade-in-up delay-200">
+            Founded by Mr. Prasanna Parameshwara Hegde, we are dedicated to preserving and promoting India's rich cultural heritage for generations to come.
+          </p>
         </div>
+      </div>
+
+      <div className="about-body">
+        {/* Mission sections */}
+        <section ref={missionRef} className="about-mission">
+          <h2 className={`section-title ${missionInView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            Our Mission
+          </h2>
+          <div className="about-mission-grid">
+            <div className={`about-mission-card ${missionInView ? 'animate-fade-in-up delay-100' : 'opacity-0'}`}>
+              <div className="about-mission-icon">🎭</div>
+              <h3>Art &amp; Culture Preservation</h3>
+              <ul>
+                {missionItems.map((item, i) => (
+                  <li key={i}>
+                    <span>{item.icon}</span>
+                    {item.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={`about-mission-card ${missionInView ? 'animate-fade-in-up delay-200' : 'opacity-0'}`}>
+              <div className="about-mission-icon">🌿</div>
+              <h3>Holistic Development</h3>
+              <ul>
+                {developmentItems.map((item, i) => (
+                  <li key={i}>
+                    <span>{item.icon}</span>
+                    {item.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Leadership */}
+        <section ref={leaderRef} className="about-leadership">
+          <h2 className={`section-title ${leaderInView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            Our Leadership
+          </h2>
+          <p className={`about-leadership-subtitle ${leaderInView ? 'animate-fade-in-up delay-100' : 'opacity-0'}`}>
+            The dedicated individuals guiding our cultural mission
+          </p>
+          <div className="about-leadership-grid">
+            {leadership.map((member, i) => (
+              <div
+                key={i}
+                className={`about-member-card ${leaderInView ? 'animate-scale-in' : 'opacity-0'}`}
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <div className="about-member-avatar">
+                  {member.name.charAt(0)}
+                </div>
+                <h3 className="about-member-name">{member.name}</h3>
+                <p className="about-member-role">{member.role}</p>
+              </div>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

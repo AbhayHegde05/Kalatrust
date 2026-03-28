@@ -8,40 +8,57 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Get the login function from the context
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError(''); setLoading(true);
     try {
-      const response = await loginService({ username, password });
-      if (response.success) {
-        // Update the global state with the user data
-        login(response.user);
-        // Navigate to the dashboard
+      const res = await loginService({ username, password });
+      if (res.success) {
+        login(res.user);
         navigate('/admin/dashboard');
       }
-    } catch (err) {
+    } catch {
       setError('Invalid credentials. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="admin-form-container">
-      <form onSubmit={handleSubmit} className="admin-form">
-        <h2>Admin Login</h2>
-        {error && <p className="error">{error}</p>}
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input type="text" id="username" value={username} onChange={e => setUsername(e.target.value)} required />
+    <div className="admin-login-page">
+      <div className="admin-login-card">
+        <div className="admin-login-logo">
+          <span>🎭</span>
+          <h1>Saraswathi Kala Trust</h1>
+          <p>Admin Portal</p>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" value={password} onChange={e => setPassword(e.target.value)} required />
-        </div>
-        <button type="submit">Log In</button>
-      </form>
+        {error && <div className="admin-login-error">{error}</div>}
+        <form onSubmit={handleSubmit}>
+          <div className="admin-login-field">
+            <label htmlFor="username">Username</label>
+            <input
+              id="username" type="text" value={username}
+              onChange={e => setUsername(e.target.value)}
+              required autoComplete="username" placeholder="admin"
+            />
+          </div>
+          <div className="admin-login-field">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password" type="password" value={password}
+              onChange={e => setPassword(e.target.value)}
+              required autoComplete="current-password" placeholder="••••••••"
+            />
+          </div>
+          <button type="submit" className="admin-login-btn" disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

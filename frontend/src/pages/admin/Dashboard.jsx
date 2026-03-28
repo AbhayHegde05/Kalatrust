@@ -1,124 +1,150 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getAdminEvents, deleteAdminEvent } from '../../services/api';
-import { logout } from '../../services/auth';
-import { useAuth } from '../../context/AuthContext';
-import Loader from '../../components/Loader';
-import './Admin.css';
 
 const Dashboard = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const { logout: authLogout } = useAuth();
+  const [search, setSearch] = useState('');
+  const [deleting, setDeleting] = useState(null);
 
-  useEffect(() => {
-    loadEvents();
-  }, []);
+  useEffect(() => { loadEvents(); }, []);
 
   const loadEvents = () => {
-    setLoading(true);
-    setError('');
+    setLoading(true); setError('');
     getAdminEvents()
-      .then(res => {
-        // Ensure the response is an array before setting the state
-        if (Array.isArray(res.data)) {
-          setEvents(res.data);
-        } else {
-          // If the data isn't an array, something is wrong
-          throw new Error("Received invalid data format from server.");
-        }
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to load events:", err);
-        setError("Could not load events. Please try again later.");
-        setLoading(false);
-      });
+      .then(res => { setEvents(Array.isArray(res.data) ? res.data : []); setLoading(false); })
+      .catch(() => { setError('Could not load events.'); setLoading(false); });
   };
 
   const handleDelete = async (id, name) => {
-    if (window.confirm(`Are you sure you want to delete the event: "${name}"?`)) {
-      try {
-        await deleteAdminEvent(id);
-        setEvents(events.filter(event => event._id !== id));
-      } catch (error) {
-        console.error("Failed to delete event:", error);
-        alert("Error: Could not delete the event.");
-      }
-    }
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    authLogout(); // This now correctly calls the logout from the AuthContext
-    // The AdminLayout will automatically handle the redirect
-  };
-
-  const kannadaDateOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  };
-
-  // Helper function to safely format the date
-  const formatDate = (dateString) => {
-    if (!dateString) return 'No Date';
+    if (!window.confirm(`Delete "${name}"? This will also remove all associated media.`)) return;
+    setDeleting(id);
     try {
-      return new Date(dateString).toLocaleDateString('kn-IN', kannadaDateOptions);
-    } catch (e) {
-      return 'Invalid Date';
+      await deleteAdminEvent(id);
+      setEvents(ev => ev.filter(e => e._id !== id));
+    } catch {
+      alert('Could not delete event.');
+    } finally {
+      setDeleting(null);
     }
   };
+
+  const filtered = events.filter(e =>
+    e.name?.toLowerCase().includes(search.toLowerCase()) ||
+    e.place?.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const now = new Date();
+  const upcoming = filtered.filter(e => new Date(e.date) >= now);
+  const past = filtered.filter(e => new Date(e.date) < now);
+
+  const formatDate = (d) => {
+    try { return new Date(d).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }); }
+    catch { return '—'; }
+  };
+
+  const EventRow = ({ event }) => (
+    <tr>
+      <td>
+        <div className="dash-event-name">{event.name}</div>
+        <div className="dash-event-place">📍 {event.place}</div>
+      </td>
+      <td className="dash-date">{formatDate(event.date)}</td>
+      <td>
+        <span className={`dash-badge ${new Date(event.date) >= now ? 'badge-upcoming' : 'badge-past'}`}>
+          {new Date(event.date) >= now ? 'Upcoming' : 'Past'}
+        </span>
+      </td>
+      <td className="dash-actions">
+        <Link to={`/admin/event/edit/${event._id}`} className="dash-btn dash-btn--edit">
+          ✏️ Edit
+        </Link>
+        <button
+          onClick={() => handleDelete(event._id, event.name)}
+          className="dash-btn dash-btn--delete"
+          disabled={deleting === event._id}
+        >
+          {deleting === event._id ? '…' : '🗑️ Delete'}
+        </button>
+      </td>
+    </tr>
+  );
 
   return (
-    <div className="admin-container">
-      <div className="admin-header">
-        <h1>Event Dashboard</h1>
-        <div className="admin-header-actions">
-          <Link to="/admin/event/new" className="btn btn-primary">+ Add New Event</Link>
-          <button onClick={handleLogout} className="btn btn-danger">Logout</button>
+    <div className="dash-page">
+      {/* Stats */}
+      <div className="dash-stats">
+        <div className="dash-stat-card">
+          <span className="dash-stat-icon">📅</span>
+          <div>
+            <p className="dash-stat-num">{events.length}</p>
+            <p className="dash-stat-label">Total Events</p>
+          </div>
         </div>
+        <div className="dash-stat-card">
+          <span className="dash-stat-icon">🔔</span>
+          <div>
+            <p className="dash-stat-num">{upcoming.length}</p>
+            <p className="dash-stat-label">Upcoming</p>
+          </div>
+        </div>
+        <div className="dash-stat-card">
+          <span className="dash-stat-icon">📜</span>
+          <div>
+            <p className="dash-stat-num">{past.length}</p>
+            <p className="dash-stat-label">Past Events</p>
+          </div>
+        </div>
+        <Link to="/admin/event/new" className="dash-stat-card dash-stat-card--cta">
+          <span className="dash-stat-icon">➕</span>
+          <div>
+            <p className="dash-stat-num">New</p>
+            <p className="dash-stat-label">Add Event</p>
+          </div>
+        </Link>
       </div>
 
-      {loading && <Loader />}
-
-      {!loading && error && (
-        <div className="admin-card text-center error-message">{error}</div>
-      )}
-
-      {!loading && !error && events.length === 0 && (
-        <div className="admin-card text-center">
-          <p>No events found. Get started by adding one!</p>
+      {/* Table */}
+      <div className="dash-table-card">
+        <div className="dash-table-header">
+          <h2>All Events</h2>
+          <input
+            className="dash-search"
+            placeholder="Search events…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
-      )}
 
-      {!loading && !error && events.length > 0 && (
-        <div className="admin-card">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Event Name</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map(event => (
-                <tr key={event._id}>
-                  <td>{event.name || 'Untitled Event'}</td>
-                  <td>{formatDate(event.date)}</td>
-                  <td className="actions-cell">
-                    <Link to={`/admin/event/edit/${event._id}`} className="btn btn-secondary">Edit</Link>
-                    <button onClick={() => handleDelete(event._id, event.name)} className="btn btn-danger">Delete</button>
-                  </td>
+        {loading && <div className="dash-loading"><div className="admin-spinner" /> Loading…</div>}
+        {!loading && error && <p className="admin-error">{error}</p>}
+        {!loading && !error && filtered.length === 0 && (
+          <div className="dash-empty">
+            <span>🎭</span>
+            <p>No events found. <Link to="/admin/event/new">Create one →</Link></p>
+          </div>
+        )}
+
+        {!loading && !error && filtered.length > 0 && (
+          <div className="dash-table-wrap">
+            <table className="dash-table">
+              <thead>
+                <tr>
+                  <th>Event</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+                {filtered.map(e => <EventRow key={e._id} event={e} />)}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
