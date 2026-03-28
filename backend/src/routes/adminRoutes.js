@@ -6,6 +6,7 @@ const { ensureAuth } = require('../middleware/auth');
 const upload = require('../middleware/multer');
 const Program = require('../models/programModel');
 const Media = require('../models/mediaModel');
+const Review = require('../models/reviewModel');
 
 // Configure Cloudinary from environment variables
 cloudinary.config({
@@ -143,6 +144,17 @@ router.post('/media', async (req, res) => {
 router.delete('/media/:id', async (req, res) => {
     await Media.findByIdAndDelete(req.params.id);
     res.json({ success: true });
+});
+
+// --- Reviews Admin API ---
+router.get('/reviews', async (req, res) => {
+  const reviews = await Review.find().populate('program', 'name').sort({ createdAt: -1 });
+  res.json(reviews);
+});
+
+router.delete('/reviews/:id', async (req, res) => {
+  await Review.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
 });
 
 module.exports = router;

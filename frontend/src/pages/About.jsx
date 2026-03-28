@@ -1,67 +1,122 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import './About.css';
+
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setInView(true); obs.disconnect(); }
+    }, { threshold });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
+
+const leadership = [
+  { name: 'Prasanna Parameshwara Hegde', role: 'President' },
+  { name: 'Gautam R Hegde', role: 'Secretary' },
+  { name: 'Ganapati V Hegde', role: 'Member' },
+  { name: 'M P Hegde', role: 'Member' },
+  { name: 'Bhuvaneshwari Hegde', role: 'Member' },
+  { name: 'Gangadhara Nayak', role: 'Member' },
+  { name: 'Purushottama Hegde', role: 'Member' },
+];
+
+const missionItems = [
+  { icon: '🎭', text: 'Promoting Yakshagana, Folk Arts, and Music for future generations' },
+  { icon: '🏘️', text: 'Organizing accessible cultural programs in rural and urban areas' },
+  { icon: '👶', text: 'Teaching traditional arts to children and youth' },
+  { icon: '⭐', text: 'Supporting emerging artists through festivals and mentorship' },
+  { icon: '🏆', text: 'Honoring master artists and recognizing new talent' },
+];
+
+const developmentItems = [
+  { icon: '🧘', text: 'Integrating yoga, meditation, and wellness with cultural practice' },
+  { icon: '🌱', text: 'Environmental conservation and sustainability initiatives' },
+  { icon: '🤝', text: 'Supporting elderly and orphaned community members' },
+  { icon: '🌾', text: 'Promoting organic farming and traditional livestock care' },
+  { icon: '📚', text: 'Organizing workshops for arts and sustainable agriculture' },
+];
 
 const About = () => {
-  const leadership = [
-    { name: 'Prasanna Parameshwara Hegde', role: 'President' },
-    { name: 'Gautam R Hegde', role: 'Secretary' },
-    { name: 'Ganapati V Hegde', role: 'Member' },
-    { name: 'M P Hegde', role: 'Member' },
-    { name: 'Bhuvaneshwari Hegde', role: 'Member' },
-    { name: 'Gangadhara Nayak', role: 'Member' },
-    { name: 'Purushottama Hegde', role: 'Member' },
-  ];
+  const [missionRef, missionInView] = useInView();
+  const [leaderRef, leaderInView] = useInView();
 
   return (
-    <div className="min-h-screen bg-cream">
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-serif text-deep-terracotta mb-4">About Saraswathi Kala Trust</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Founded on September 9, 2022, by Mr. Prasanna Parameshwara Hegde, we are dedicated to preserving and promoting India's rich cultural heritage.
+    <div className="about-page">
+      {/* Hero */}
+      <div className="about-hero">
+        <div className="about-hero-content">
+          <p className="about-hero-tag animate-fade-in-down">Est. September 9, 2022</p>
+          <h1 className="about-hero-title animate-fade-in-up delay-100">
+            Saraswathi Kala Trust
+          </h1>
+          <p className="about-hero-desc animate-fade-in-up delay-200">
+            Founded by Mr. Prasanna Parameshwara Hegde, we are dedicated to preserving and promoting India's rich cultural heritage for generations to come.
           </p>
         </div>
+      </div>
 
-        {/* Mission Sections */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          <div className="card">
-            <h2 className="text-3xl font-serif text-deep-terracotta mb-6">Art & Culture Preservation</h2>
-            <ul className="space-y-3 text-gray-700">
-              <li>• Promoting Yakshagana, Folk Arts, and Music for future generations</li>
-              <li>• Organizing accessible cultural programs in rural and urban areas</li>
-              <li>• Teaching traditional arts to children and youth</li>
-              <li>• Supporting emerging artists through festivals and mentorship</li>
-              <li>• Honoring master artists and recognizing new talent</li>
-            </ul>
+      <div className="about-body">
+        {/* Mission sections */}
+        <section ref={missionRef} className="about-mission">
+          <h2 className={`section-title ${missionInView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            Our Mission
+          </h2>
+          <div className="about-mission-grid">
+            <div className={`about-mission-card ${missionInView ? 'animate-fade-in-up delay-100' : 'opacity-0'}`}>
+              <div className="about-mission-icon">🎭</div>
+              <h3>Art &amp; Culture Preservation</h3>
+              <ul>
+                {missionItems.map((item, i) => (
+                  <li key={i}>
+                    <span>{item.icon}</span>
+                    {item.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className={`about-mission-card ${missionInView ? 'animate-fade-in-up delay-200' : 'opacity-0'}`}>
+              <div className="about-mission-icon">🌿</div>
+              <h3>Holistic Development</h3>
+              <ul>
+                {developmentItems.map((item, i) => (
+                  <li key={i}>
+                    <span>{item.icon}</span>
+                    {item.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+        </section>
 
-          <div className="card">
-            <h2 className="text-3xl font-serif text-deep-terracotta mb-6">Holistic Development</h2>
-            <ul className="space-y-3 text-gray-700">
-              <li>• Integrating yoga, meditation, and wellness with cultural practice</li>
-              <li>• Environmental conservation and sustainability initiatives</li>
-              <li>• Supporting elderly and orphaned community members</li>
-              <li>• Promoting organic farming and traditional livestock care</li>
-              <li>• Organizing workshops for arts and sustainable agriculture</li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Leadership Section */}
-        <div className="bg-white rounded-xl shadow-lg p-8 border border-gold/20">
-          <h2 className="text-4xl font-serif text-center text-deep-terracotta mb-12">Our Leadership</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {leadership.map((member, index) => (
-              <div key={index} className="text-center p-6 bg-cream rounded-lg border border-terracotta/20">
-                <div className="w-20 h-20 bg-terracotta rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-2xl text-cream font-bold">{member.name.charAt(0)}</span>
+        {/* Leadership */}
+        <section ref={leaderRef} className="about-leadership">
+          <h2 className={`section-title ${leaderInView ? 'animate-fade-in-up' : 'opacity-0'}`}>
+            Our Leadership
+          </h2>
+          <p className={`about-leadership-subtitle ${leaderInView ? 'animate-fade-in-up delay-100' : 'opacity-0'}`}>
+            The dedicated individuals guiding our cultural mission
+          </p>
+          <div className="about-leadership-grid">
+            {leadership.map((member, i) => (
+              <div
+                key={i}
+                className={`about-member-card ${leaderInView ? 'animate-scale-in' : 'opacity-0'}`}
+                style={{ animationDelay: `${i * 80}ms` }}
+              >
+                <div className="about-member-avatar">
+                  {member.name.charAt(0)}
                 </div>
-                <h3 className="text-xl font-serif text-deep-terracotta mb-2">{member.name}</h3>
-                <p className="text-gray-600">{member.role}</p>
+                <h3 className="about-member-name">{member.name}</h3>
+                <p className="about-member-role">{member.role}</p>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );

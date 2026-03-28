@@ -15,6 +15,7 @@ const api = axios.create({
 export const getEvents = () => api.get('/events');
 export const getEventBySlug = (slug) => api.get(`/events/${slug}`);
 export const getGalleryMedia = () => api.get('/gallery');
+export const submitReview = (slug, data) => api.post(`/events/${slug}/reviews`, data);
 
 // --- ADMIN CRUD API FUNCTIONS ---
 export const getAdminEvents = () => api.get('/admin/programs');
