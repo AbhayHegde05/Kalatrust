@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
@@ -18,26 +17,44 @@ connectDB();
 // which is necessary for the 'secure' cookie setting to work correctly.
 app.set('trust proxy', 1);
 
-// --- Middleware ---
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true
-}));
+const isProduction = process.env.NODE_ENV === 'production';
+
+// --- Manual CORS headers (most reliable approach) ---
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  const allowed = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map(o => o.trim())
+    : ['http://localhost:5173', 'http://localhost:3000'];
+
+  if (!origin || allowed.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+
+  // Respond immediately to preflight
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// --- UPDATED Session & Passport Configuration ---
+// --- Session & Passport Configuration ---
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: {
-    // These settings are required for cross-domain cookies
-    secure: true, // Only send cookie over HTTPS
-    sameSite: 'none', // Allow cookie to be sent from a different domain
-    httpOnly: true, // Prevents client-side JS from accessing the cookie
-    maxAge: 1000 * 60 * 60 * 24 // Cookie expires in 1 day
+    // secure: true requires HTTPS — only enable in production (Render/Vercel)
+    // In local dev over http://localhost it must be false or the browser drops the cookie
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 }));
 app.use(passport.initialize());
