@@ -4,9 +4,23 @@ const passport = require('passport');
 const cloudinary = require('cloudinary').v2;
 const { ensureAuth } = require('../middleware/auth');
 const upload = require('../middleware/multer');
-const Program = require('../models/programModel');
-const Media = require('../models/mediaModel');
-const Review = require('../models/reviewModel');
+const { 
+  getAllPrograms, 
+  getProgramById, 
+  createProgram, 
+  updateProgram, 
+  deleteProgram 
+} = require('../services/programService');
+const { 
+  getMediaByProgram, 
+  addMedia, 
+  deleteMedia, 
+  deleteMediaByProgram 
+} = require('../services/mediaService');
+const { 
+  deleteReviewsByProgram 
+} = require('../services/reviewService');
+const { db } = require('../config/firebase');
 
 // Configure Cloudinary from environment variables
 cloudinary.config({
@@ -69,7 +83,6 @@ router.get('/user', (req, res) => {
   res.json({ user: req.user || null });
 });
 
-
 // --- Protected Admin Routes ---
 // Any route defined below this middleware will require an active session.
 router.use(ensureAuth);
@@ -77,30 +90,57 @@ router.use(ensureAuth);
 // --- Program (Event) CRUD API ---
 
 router.get('/programs', async (req, res) => {
-  const programs = await Program.find().sort({ date: -1 });
-  res.json(programs);
+  try {
+    const programs = await getAllPrograms();
+    res.json(programs);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 router.get('/programs/:id', async (req, res) => {
-  const program = await Program.findById(req.params.id).lean();
-  const media = await Media.find({ program: req.params.id }).lean();
-  res.json({ ...program, media });
+  try {
+    const program = await getProgramById(req.params.id);
+    if (!program) return res.status(404).json({ message: 'Program not found' });
+    const media = await getMediaByProgram(req.params.id);
+    res.json({ ...program, media });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 router.post('/programs', async (req, res) => {
-  const newProgram = await Program.create(req.body);
-  res.status(201).json(newProgram);
+  try {
+    const newProgram = await createProgram(req.body);
+    res.status(201).json(newProgram);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 router.put('/programs/:id', async (req, res) => {
-  const updatedProgram = await Program.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.json(updatedProgram);
+  try {
+    const updatedProgram = await updateProgram(req.params.id, req.body);
+    res.json(updatedProgram);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 router.delete('/programs/:id', async (req, res) => {
-  await Program.findByIdAndDelete(req.params.id);
-  await Media.deleteMany({ program: req.params.id });
-  res.json({ success: true });
+  try {
+    await deleteProgram(req.params.id);
+    await deleteMediaByProgram(req.params.id);
+    await deleteReviewsByProgram(req.params.id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 // --- Media Management API ---
@@ -135,26 +175,54 @@ router.post('/upload', upload.array('files', 10), async (req, res) => {
   }
 });
 
-
 router.post('/media', async (req, res) => {
-  const newMedia = await Media.create(req.body);
-  res.status(201).json(newMedia);
+  try {
+    const newMedia = await addMedia(req.body);
+    res.status(201).json(newMedia);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 router.delete('/media/:id', async (req, res) => {
-    await Media.findByIdAndDelete(req.params.id);
+  try {
+    await deleteMedia(req.params.id);
     res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 // --- Reviews Admin API ---
 router.get('/reviews', async (req, res) => {
-  const reviews = await Review.find().populate('program', 'name').sort({ createdAt: -1 });
-  res.json(reviews);
+  try {
+    const snapshot = await db.collection('reviews').orderBy('createdAt', 'desc').get();
+    const reviews = await Promise.all(snapshot.docs.map(async doc => {
+      const data = doc.data();
+      let programName = 'Unknown Program';
+      if (data.program) {
+        const progDoc = await db.collection('programs').doc(data.program).get();
+        if (progDoc.exists) programName = progDoc.data().name;
+      }
+      return { id: doc.id, ...data, program: { name: programName } };
+    }));
+    res.json(reviews);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 router.delete('/reviews/:id', async (req, res) => {
-  await Review.findByIdAndDelete(req.params.id);
-  res.json({ success: true });
+  try {
+    await db.collection('reviews').doc(req.params.id).delete();
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server Error' });
+  }
 });
 
 module.exports = router;

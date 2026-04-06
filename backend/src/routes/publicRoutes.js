@@ -1,20 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const Program = require('../models/programModel');
-const Media = require('../models/mediaModel');
-const Review = require('../models/reviewModel');
+const { getAllPrograms, getProgramBySlug } = require('../services/programService');
+const { getMediaByProgram, addMedia } = require('../services/mediaService');
+const { addReview, getReviewsByProgram } = require('../services/reviewService');
+const { db } = require('../config/firebase');
 
 // GET all events
 router.get('/events', async (req, res) => {
   try {
-    const programs = await Program.find().sort({ date: -1 }).lean();
-    const media = await Media.find({ program: { $in: programs.map(p => p._id) } }).lean();
+    const programs = await getAllPrograms();
+    const mediaSnapshot = await db.collection('media').get();
+    const media = mediaSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    
     const mediaMap = media.reduce((acc, m) => {
       (acc[m.program] = acc[m.program] || []).push(m);
       return acc;
     }, {});
-    res.json(programs.map(p => ({ ...p, media: mediaMap[p._id] || [] })));
+    
+    res.json(programs.map(p => ({ ...p, media: mediaMap[p.id] || [] })));
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
 });
@@ -22,12 +27,15 @@ router.get('/events', async (req, res) => {
 // GET single event by slug
 router.get('/events/:slug', async (req, res) => {
   try {
-    const event = await Program.findOne({ slug: req.params.slug }).lean();
+    const event = await getProgramBySlug(req.params.slug);
     if (!event) return res.status(404).json({ message: 'Event not found' });
-    const media = await Media.find({ program: event._id }).lean();
-    const reviews = await Review.find({ program: event._id, approved: true }).sort({ createdAt: -1 }).lean();
+    
+    const media = await getMediaByProgram(event.id);
+    const reviews = await getReviewsByProgram(event.id);
+    
     res.json({ ...event, media, reviews });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
 });
@@ -35,13 +43,22 @@ router.get('/events/:slug', async (req, res) => {
 // POST review for an event
 router.post('/events/:slug/reviews', async (req, res) => {
   try {
-    const event = await Program.findOne({ slug: req.params.slug }).lean();
+    const event = await getProgramBySlug(req.params.slug);
     if (!event) return res.status(404).json({ message: 'Event not found' });
+    
     const { name, rating, comment } = req.body;
     if (!name || !rating || !comment) return res.status(400).json({ message: 'All fields required' });
-    const review = await Review.create({ program: event._id, name, rating: Number(rating), comment });
+    
+    const review = await addReview({ 
+      program: event.id, 
+      name, 
+      rating: Number(rating), 
+      comment 
+    });
+    
     res.status(201).json(review);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
 });
@@ -49,9 +66,11 @@ router.post('/events/:slug/reviews', async (req, res) => {
 // GET gallery
 router.get('/gallery', async (req, res) => {
   try {
-    const media = await Media.find().sort({ createdAt: -1 }).lean();
+    const mediaSnapshot = await db.collection('media').orderBy('createdAt', 'desc').get();
+    const media = mediaSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
     res.json(media);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server Error' });
   }
 });

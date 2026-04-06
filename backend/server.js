@@ -2,15 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
-const MongoStore = require('connect-mongo');
 
-const connectDB = require('./src/config/database');
+const { db } = require('./src/config/firebase');
 const { configurePassport } = require('./src/middleware/auth');
 const publicRoutes = require('./src/routes/publicRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 
 const app = express();
-connectDB();
 
 // --- CRITICAL FOR DEPLOYMENT ---
 // This tells Express to trust the 'X-Forwarded-Proto' header from Render's proxy,
@@ -47,7 +45,6 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: {
     // secure: true requires HTTPS — only enable in production (Render/Vercel)
     // In local dev over http://localhost it must be false or the browser drops the cookie
@@ -57,6 +54,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 configurePassport(passport);
