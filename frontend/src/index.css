@@ -46,11 +46,36 @@ h1, h2, h3, h4, h5, h6 {
 @keyframes scrollLeft { 0% { transform:translateX(0); } 100% { transform:translateX(-50%); } }
 @keyframes spin       { to { transform:rotate(360deg); } }
 
-.animate-fade-in-up   { animation: fadeInUp   0.65s ease both; }
-.animate-fade-in-down { animation: fadeInDown 0.5s  ease both; }
-.animate-fade-in      { animation: fadeIn     0.5s  ease both; }
-.animate-scale-in     { animation: scaleIn    0.45s ease both; }
-.animate-float        { animation: float      3.5s  ease-in-out infinite; }
+/* Faster animations for better perceived performance */
+.animate-fade-in-up   { animation: fadeInUp   0.4s ease both; will-change: transform, opacity; }
+.animate-fade-in-down { animation: fadeInDown 0.35s ease both; will-change: transform, opacity; }
+.animate-fade-in      { animation: fadeIn     0.35s ease both; will-change: opacity; }
+.animate-scale-in     { animation: scaleIn    0.35s ease both; will-change: transform, opacity; }
+.animate-float        { animation: float      3.5s ease-in-out infinite; will-change: transform; }
+
+/* GPU acceleration for animated elements */
+.hero-bg, .pillar-card, .event-card, .upcoming-event-card {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Content visibility for below-fold sections (improves LCP) */
+.py-20, section:not(.hero-section) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Contain layout for complex sections */
+.hero-section {
+  contain: layout style;
+  content-visibility: visible;
+}
+
+/* Prevent layout shifts */
+img, video {
+  height: auto;
+  max-width: 100%;
+}
 
 .delay-100 { animation-delay:.1s; }
 .delay-200 { animation-delay:.2s; }

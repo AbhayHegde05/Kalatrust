@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
-import bannerBackground from '../assets/background.png';
 import { getEvents } from '../services/api';
 import './Home.css';
+
+// Lazy load background image
+const bannerBackground = new URL('../assets/background.png', import.meta.url).href;
 
 // Simple intersection observer hook for scroll animations
 function useInView(threshold = 0.15) {
@@ -24,7 +26,7 @@ const pillars = [
   { icon: '🌿', title: 'Folk Arts', desc: 'Rich tapestry of regional folk traditions, crafts, and performing arts that reflect local heritage.' },
 ];
 
-const PillarCard = ({ icon, title, desc, delay }) => {
+const PillarCard = memo(({ icon, title, desc, delay }) => {
   const [ref, inView] = useInView();
   return (
     <div
@@ -37,14 +39,14 @@ const PillarCard = ({ icon, title, desc, delay }) => {
       <p className="text-gray-600 leading-relaxed">{desc}</p>
     </div>
   );
-};
+});
 
 const Home = () => {
   const [ctaRef, ctaInView] = useInView();
   const [upcomingRef, upcomingInView] = useInView();
   const [upcomingEvents, setUpcomingEvents] = useState([]);
 
-  useEffect(() => {
+  const fetchEvents = useCallback(() => {
     getEvents()
       .then(res => {
         const now = new Date();
@@ -57,13 +59,17 @@ const Home = () => {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="hero-section relative flex items-center justify-center overflow-hidden" style={{ minHeight: '100vh' }}>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat hero-bg"
-          style={{ backgroundImage: `url(${bannerBackground})` }}
+          style={{ backgroundImage: `url(${bannerBackground})`, width: '100%', height: '100%' }}
         />
         <div className="absolute inset-0 hero-overlay" />
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -121,13 +127,18 @@ const Home = () => {
                 return (
                   <Link
                     to={`/events/${event.slug}`}
-                    key={event._id}
+                    key={event.id || event._id}
                     className={`upcoming-event-card ${upcomingInView ? 'animate-scale-in' : 'opacity-0'}`}
                     style={{ animationDelay: `${i * 150}ms` }}
                   >
                     <div className="upcoming-card-img">
                       {thumb ? (
-                        <img src={thumb.url} alt={event.name} />
+                        <img 
+                          src={thumb.url} 
+                          alt={event.name}
+                          loading="lazy"
+                          decoding="async"
+                        />
                       ) : (
                         <div className="upcoming-card-placeholder">🎭</div>
                       )}

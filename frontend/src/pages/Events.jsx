@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { getEvents } from '../services/api';
 import './Events.css';
@@ -16,7 +16,7 @@ function useInView(threshold = 0.1) {
   return [ref, inView];
 }
 
-const EventCard = ({ event, index, isUpcoming }) => {
+const EventCard = memo(({ event, index, isUpcoming }) => {
   const [ref, inView] = useInView();
   const thumbnail = event.media?.find(item => item.mediaType === 'image');
   const dateObj = new Date(event.date);
@@ -32,7 +32,13 @@ const EventCard = ({ event, index, isUpcoming }) => {
         {isUpcoming && <div className="upcoming-ribbon">Upcoming</div>}
         <div className="event-card-img-wrap">
           {thumbnail ? (
-            <img src={thumbnail.url} alt={event.name} className="event-card-img" />
+            <img 
+              src={thumbnail.url} 
+              alt={event.name} 
+              className="event-card-img"
+              loading="lazy"
+              decoding="async"
+            />
           ) : (
             <div className="event-card-placeholder">🎭</div>
           )}
@@ -52,7 +58,7 @@ const EventCard = ({ event, index, isUpcoming }) => {
       </div>
     </Link>
   );
-};
+});
 
 const SectionHeader = ({ title, subtitle }) => {
   const [ref, inView] = useInView();
@@ -68,7 +74,7 @@ const Events = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchEvents = useCallback(() => {
     getEvents()
       .then(response => {
         setEvents(response.data);
@@ -79,6 +85,10 @@ const Events = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
 
   if (loading) {
     return (

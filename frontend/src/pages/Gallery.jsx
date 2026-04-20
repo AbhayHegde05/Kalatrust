@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { getGalleryMedia } from '../services/api';
 
 const Gallery = () => {
@@ -7,7 +7,7 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState(null);
 
-  useEffect(() => {
+  const fetchMedia = useCallback(() => {
     setLoading(true);
     getGalleryMedia()
       .then(response => {
@@ -19,6 +19,10 @@ const Gallery = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    fetchMedia();
+  }, [fetchMedia]);
 
   const filteredMedia = media.filter(item => item.mediaType === filter);
 
@@ -87,6 +91,8 @@ const Gallery = () => {
                   <img
                     src={item.url}
                     alt={item.caption || 'Gallery Image'}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-auto object-cover hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
@@ -94,6 +100,7 @@ const Gallery = () => {
                     src={item.url}
                     className="w-full h-auto object-cover"
                     muted
+                    preload="none"
                     onMouseEnter={(e) => e.target.play()}
                     onMouseLeave={(e) => e.target.pause()}
                   />

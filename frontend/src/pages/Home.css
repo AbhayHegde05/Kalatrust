@@ -4,12 +4,14 @@
 }
 
 .hero-bg {
-  transform: scale(1.05);
-  transition: transform 8s ease;
+  transform: scale(1);
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .hero-section:hover .hero-bg {
-  transform: scale(1.08);
+  transform: scale(1.03);
 }
 
 .hero-overlay {
