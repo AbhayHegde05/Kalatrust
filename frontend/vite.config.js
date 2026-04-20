@@ -44,8 +44,15 @@ export default defineConfig({
     },
     cssCodeSplit: true,
     sourcemap: false,
-    assetsInlineLimit: 4096,
+    assetsInlineLimit: 8192, // Inline assets smaller than 8KB
     cssMinify: true,
+    reportCompressedSize: false, // Faster builds
+    chunkSizeWarningLimit: 1000, // 1MB warning limit
+  },
+  server: {
+    // Development optimizations
+    open: false,
+    cors: true,
   },
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom', 'axios'],
